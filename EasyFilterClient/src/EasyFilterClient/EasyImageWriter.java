@@ -12,13 +12,13 @@ import java.io.FileWriter;
  * @author TEO
  */
 public final class EasyImageWriter {
-    
+
     int width;
-    int height; 
-    int maxGrayValue; 
-    int image[][]; 
+    int height;
+    int maxGrayValue;
+    int image[][];
     String fileName;
-    
+
     public EasyImageWriter(int width, int height, int maxGrayValue, int image[][], String fileName) {
          //this.write(width, height, maxGrayValue, image, fileName);
         this.setFileName(fileName);
@@ -71,7 +71,7 @@ public final class EasyImageWriter {
     public void write () {
         try {
             int i,j;
-            // Create file 
+            // Create file
             FileWriter fstream = new FileWriter(this.getFileName());
             BufferedWriter out = new BufferedWriter(fstream);
             out.write("P2\n");
@@ -81,7 +81,7 @@ public final class EasyImageWriter {
             for(i = 0; i < this.getHeight(); i++)
                 for(j = 0; j < this.getWidth(); j++)
                     out.write(this.getImage()[i][j]+"\n");
-            
+
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }

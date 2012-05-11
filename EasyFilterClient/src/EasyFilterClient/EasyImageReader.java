@@ -13,19 +13,19 @@ import java.util.Scanner;
  */
 public class EasyImageReader {
     /**
-     * 
+     *
      */
     public int[][] image;
-    
+
     private int width;
-    
+
     private int height;
-    
+
     private int maxGrayValue;
 
     /**
-     * 
-     * @param fileName 
+     *
+     * @param fileName
      */
     public EasyImageReader (String fileName) {
         this.getFileContents(fileName);
@@ -34,11 +34,11 @@ public class EasyImageReader {
     public void getFileContents (String fileName) {
         Scanner sc2 = null;
         int wordCount = 0;
-        
+
         try {
             sc2 = new Scanner(new File(fileName));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  
+            e.printStackTrace();
         }
         /**
          * Read image header and contents using the Scanner class
@@ -65,12 +65,12 @@ public class EasyImageReader {
                 case 2:
                     this.setHeight(Integer.parseInt(s));
                     this.image = new int[this.getHeight()][this.getWidth()];
-                    
+
                     System.out.println("h"+this.getHeight());
                     break;
                 case 3:
                     this.setMaxGrayValue(Integer.parseInt(s));
-                    
+
                     System.out.println("m"+this.getMaxGrayValue());
                     break;
                 default:
@@ -87,7 +87,7 @@ public class EasyImageReader {
                         i = 0;
                     break;
                 }
-                
+
                 wordCount ++;
             }
         }
