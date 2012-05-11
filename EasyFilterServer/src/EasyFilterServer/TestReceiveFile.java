@@ -1,6 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
 package EasyFilterServer;
 
@@ -14,17 +18,23 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
- * todo del getteri si setteri inutili
- * @author alex
+ * test: primeste un fisier
  */
 public class TestReceiveFile {
-    private int serverPort;
-    ServerSocket serverSocket;
-    
     /**
-     * Constructor 
-     * 
-     * @param serverPort 
+     * server port number
+     */
+    private int serverPort;
+
+    /**
+     * the socket that will be used to receive files from clients
+     */
+    ServerSocket serverSocket;
+
+    /**
+     * Constructor
+     *
+     * @param serverPort server port number
      */
     public TestReceiveFile(int serverPort)
         throws UnknownHostException, IOException
@@ -32,26 +42,20 @@ public class TestReceiveFile {
         this.serverPort = serverPort;
 
         // Open connection to server
-        this.serverSocket  = new ServerSocket(this.serverPort);
+        this.setServerSocket(new ServerSocket(this.getServerPort()));
     }
 
-    public int getServerPort() {
-        return serverPort;
-    }
-
-    public void setServerPort(int serverPort) {
-        this.serverPort = serverPort;
-    }
-    
     /**
-     * Metoda care trimite o poza sub forma unui pachet 
+     * Sends a picture as a Package object
+     *
+     * @return void
      */
     public void listen() throws IOException {
         while (true) {
             Socket clientSocket = null;
 
             try {
-                // acceptam conexiunea de la client
+                // open client connection
                 clientSocket = this.serverSocket.accept();
                 this.readData(clientSocket);
             } catch (Exception e) {
@@ -60,20 +64,47 @@ public class TestReceiveFile {
             }
         }
     }
-    
+
     /**
-     * Reads the contents of the file sent by the client 
+     * Reads the contents of the file sent by the client
+     *
+     * @param clientSocket the socket used for the communication with the client
+     *
+     * @return void
      */
     public void readData(Socket clientSocket)
         throws IOException, ClassNotFoundException
     {
+        // open streams for reading and writing
         InputStream is = clientSocket.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(is);
-        
-        // citeste imaginea ca obiect de la client
+
+        // read the image as an object from the client
         Package pkg = (Package)ois.readObject();
 
-        EasyImageWriter eiw = new EasyImageWriter(pkg.getWidth(), pkg.getHeight(), pkg.getMaxGrayValue(), pkg.getImage(),"my_test.pgm");
+        // test purpose only: write the image
+        EasyImageWriter eiw = new EasyImageWriter(
+            pkg.getMagicNumber(), pkg.getWidth(), pkg.getHeight(),
+            pkg.getMaxGrayValue(), pkg.getImage(),"my_test.pgm"
+        );
         eiw.write();
+    }
+
+    // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    private void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    private void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 }

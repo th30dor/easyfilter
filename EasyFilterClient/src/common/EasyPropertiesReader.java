@@ -1,16 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
-package EasyFilterClient;
-
+package common;
 
 import java.io.File;
 import org.ini4j.*;
 
 /**
- *
- * @author alex
+ * Reads properties from the configuration file ( "config/config.ini" )
  */
 public class EasyPropertiesReader {
     /**
@@ -18,6 +20,11 @@ public class EasyPropertiesReader {
      */
     private Ini ini;
 
+    /**
+     * Constructor
+     *
+     * @param fileName
+     */
     public EasyPropertiesReader(String fileName) {
         try {
             this.setIni(new Ini(new File(fileName)));
@@ -31,8 +38,9 @@ public class EasyPropertiesReader {
     /**
      * Reads a property from the ini file
      *
-     * @param section String name of the section
-     * @param key     String name of the key
+     * @param section name of the section
+     * @param key     name of the key
+     *
      * @return String corresponding value
      */
     public String readProperty(String section, String key) {
@@ -49,5 +57,4 @@ public class EasyPropertiesReader {
     public void setIni(Ini ini) {
         this.ini = ini;
     }
-
 }

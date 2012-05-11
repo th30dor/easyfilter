@@ -1,22 +1,26 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
 package EasyFilterClient;
 
+import common.EasyPropertiesReader;
 import common.EasyImageReader;
 import common.Package;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
 /**
- *
- * @author TEO
+ * Main client class
  */
 public class EasyFilterClient {
 
     /**
-     * @param args the command line arguments
+     * Main method
      */
     public static void main(String[] args)
         throws UnknownHostException, IOException
@@ -24,26 +28,25 @@ public class EasyFilterClient {
         // Read the input file
         EasyImageReader inputFile = new EasyImageReader("images/garfield2.pgm");
 
-        // verificam fisierul de configurare
+        // test: verificam fisierul de configurare
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
         System.out.println("config: " + props.readProperty("important", "p1"));
-        
-        // verificare tirmitere fisier
+
+        // test: verificare tirmitere fisier
         String serverIP = new String("127.0.0.1");
         int serverPort = 5001;
         TestSendFile tsf = new TestSendFile(serverIP, serverPort);
 
+        // Test send file to server
         tsf.sendFile(new Package(
-            inputFile.getWidth(), 
+            inputFile.getMagicNumber(),
+            inputFile.getWidth(),
             inputFile.getHeight(),
             inputFile.getMaxGrayValue(),
             inputFile.getImage()
         ));
-        
-       // tsf.sendFile("muie");
-        
-//        
-//        // Write the output file
+
+//        // test: Write the output file
 //        EasyImageWriter eiw = new EasyImageWriter(
 //            inputFile.getWidth(), inputFile.getHeight(),
 //            inputFile.getMaxGrayValue(), inputFile.image, "images/test.pgm"
