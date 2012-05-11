@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyfilter;
+package EasyFilterClient;
 
 /**
  *
  * @author TEO
  */
-public class EasyFilter {
+public class EasyFilterClient {
 
     /**
      * @param args the command line arguments
