@@ -17,5 +17,6 @@ public class EasyFilter {
         // TODO code application logic here
         EasyImageReader inputFile = new EasyImageReader("D:\\garfield2.pgm");
         EasyImageWriter eiw = new EasyImageWriter(inputFile.getWidth(), inputFile.getHeight(), inputFile.getMaxGrayValue(), inputFile.image, "D:\\test.pgm");
+        eiw.write();
     }
 }
