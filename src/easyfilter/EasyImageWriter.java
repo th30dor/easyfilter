@@ -69,22 +69,21 @@ public final class EasyImageWriter {
     }
 
     public void write () {
-        try{
+        try {
             int i,j;
             // Create file 
             FileWriter fstream = new FileWriter(this.getFileName());
-            try (BufferedWriter out = new BufferedWriter(fstream)) {
-                out.write("P2\n");
-                out.write(this.getWidth() + " " + this.getHeight() + "\n");
-                out.write(getMaxGrayValue() + "\n");
-                
-                for(i = 0; i < this.getHeight(); i++)
-                    for(j = 0; j < this.getWidth(); j++)
-                        out.write(this.getImage()[i][j]+"\n");
-            }
-        } catch (Exception e){//Catch exception if any
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write("P2\n");
+            out.write(this.getWidth() + " " + this.getHeight() + "\n");
+            out.write(getMaxGrayValue() + "\n");
+
+            for(i = 0; i < this.getHeight(); i++)
+                for(j = 0; j < this.getWidth(); j++)
+                    out.write(this.getImage()[i][j]+"\n");
+            
+        } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }
     }
-    
 }
