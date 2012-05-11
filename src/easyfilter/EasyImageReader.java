@@ -76,8 +76,6 @@ public class EasyImageReader {
                 default:
                     position = wordCount - 3;
                     lineWidth = this.getWidth();
-                    //System.out.println("linewei: "+(position)/lineWidth +"|"+ (position - 1)%lineWidth);
-                    //this.image[(position)/lineWidth][(position - 1) % lineWidth] = Integer.parseInt(s);
                     this.image[i][j] = Integer.parseInt(s);
                      j++;
 
