@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package EasyFilterClient;
+package common;
 
 import java.io.Serializable;
 
@@ -20,7 +20,7 @@ public class Package implements Serializable {
 
     public int[][] image;
 
-    public Package(int width, int height, int maxGrayValue  , int[][] image) {
+    public Package(int width, int height, int maxGrayValue, int[][] image) {
         this.width = width;
         this.height = height;
         this.maxGrayValue = maxGrayValue;

@@ -4,6 +4,8 @@
  */
 package EasyFilterServer;
 
+import common.EasyImageWriter;
+import common.Package;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -69,10 +71,9 @@ public class TestReceiveFile {
         ObjectInputStream ois = new ObjectInputStream(is);
         
         // citeste imaginea ca obiect de la client
-//        Package pkg = (Package)ois.readObject();
-        String s = (String)ois.readObject();
-        System.out.println("s: "+s);
-        
-//        System.out.println("pkg: "+pkg.getHeight() + "|"+pkg.getWidth());
+        Package pkg = (Package)ois.readObject();
+
+        EasyImageWriter eiw = new EasyImageWriter(pkg.getWidth(), pkg.getHeight(), pkg.getMaxGrayValue(), pkg.getImage(),"my_test.pgm");
+        eiw.write();
     }
 }

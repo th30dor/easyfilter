@@ -4,6 +4,8 @@
  */
 package EasyFilterClient;
 
+import common.EasyImageReader;
+import common.Package;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -31,14 +33,14 @@ public class EasyFilterClient {
         int serverPort = 5001;
         TestSendFile tsf = new TestSendFile(serverIP, serverPort);
 
-//        tsf.sendFile(new Package(
-//            inputFile.getWidth(),
-//            inputFile.getHeight(),
-//            inputFile.getMaxGrayValue(),
-//            inputFile.getImage()
-//        ));
-//        
-        tsf.sendFile("muie");
+        tsf.sendFile(new Package(
+            inputFile.getWidth(), 
+            inputFile.getHeight(),
+            inputFile.getMaxGrayValue(),
+            inputFile.getImage()
+        ));
+        
+       // tsf.sendFile("muie");
         
 //        
 //        // Write the output file

@@ -4,6 +4,7 @@
  */
 package EasyFilterClient;
 
+import common.Package;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -69,6 +70,7 @@ public class TestSendFile {
 
         oos.close();
         os.close();
+        
     }
     
     public void sendFile ( String s) throws IOException {

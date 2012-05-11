@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package EasyFilterClient;
+package common;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -116,7 +116,7 @@ public class EasyImageReader {
         this.width = width;
     }
 
-    int[][] getImage() {
+    public int[][] getImage() {
         return this.image;
     }
 }
