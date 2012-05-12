@@ -13,14 +13,12 @@ package EasyFilterServer;
  * image
  */
 public class FilterApplier {
-
     static int[][] filter = {{-1, -1, -1}, {-1, 9, -1}, {-1, -1, -1}};
     static int factor = 9;
     static int bias = 0;
 
     /**
-     * Apply a filter to a given image or part of image
-     * The result is stored in the modified img argument.
+     * Applies a filter to a given image or part of image
      *
      * @param width  image width
      * @param height image height
@@ -30,6 +28,7 @@ public class FilterApplier {
      */
     static int[][] applyFilter(int width, int height, int[][] img){
         int i, j, aux;
+        int[][] modifiedImg = new int[height][width];
 
         for(i = 1; i < height - 1; i++ ) {
             for(j = 1; j < width - 1; j++) {
@@ -46,10 +45,15 @@ public class FilterApplier {
                 aux = aux / FilterApplier.factor;
                 aux = aux + FilterApplier.bias;
 
-                img[i][j] = aux;
+                if ( aux > 255 ) {
+                    aux = 255;
+                } else if ( aux < 0 ) {
+                    aux = 0;
+                }
+                modifiedImg[i][j] = aux;
             }
         }
 
-        return img;
+        return modifiedImg;
     }
 }

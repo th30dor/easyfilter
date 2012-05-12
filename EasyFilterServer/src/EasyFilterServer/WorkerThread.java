@@ -43,7 +43,11 @@ class WorkerThread extends Thread{
         Package pkg = (Package)this.getCi().receiveFile();
 
         // apply filter
-//        pkg.setImage(FilterApplier.applyFilter(pkg.getWidth(), pkg.getHeight(), pkg.getImage()));
+        pkg.setImage(
+            FilterApplier.applyFilter(
+                pkg.getWidth(), pkg.getHeight(), pkg.getImage()
+            )
+        );
 
         // send the file back to the client
         this.getCi().sendFile(pkg);
