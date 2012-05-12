@@ -20,11 +20,13 @@ public class EasyFilterServer {
         throws UnknownHostException, IOException
     {
         // verificam proprietati din config.ini
-        EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
-        System.out.println("config: " + props.readProperty("important", "abcd"));
-
+      //  EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
+       // System.out.println("config: " + props.readProperty("important", "abcd"));
+        
+        OneThreadPerSocket otps = new OneThreadPerSocket(new BlockingTcpConnection());
+           otps.acceptConnections();
         // asteptam sa primim un fisier
-        TestReceiveFile trf = new TestReceiveFile(5001);
-        trf.listen();
+        //TestReceiveFile trf = new TestReceiveFile(5001);
+        //trf.listen();
     }
 }

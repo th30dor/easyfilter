@@ -65,6 +65,21 @@ public final class EasyImageWriter {
         this.setImage(image);
         this.setFileName(fileName);
     }
+    
+    /**
+     * Constructor
+     *
+     * @param p        package to be written              
+     * @param fileName file name
+     */
+    public EasyImageWriter (Package p, String fileName) {
+        this.setMagicNumber(p.getMagicNumber());
+        this.setWidth(p.getWidth());
+        this.setHeight(p.getHeight());
+        this.setMaxGrayValue(p.getMaxGrayValue());
+        this.setImage(p.getImage());
+        this.setFileName(fileName);
+    }
 
     /**
      * Writes the image into a file
