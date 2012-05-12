@@ -73,14 +73,14 @@ public final class EasyImageWriter
      * @param p        package to be written              
      * @param fileName file name
      */
-    public EasyImageWriter (Package p, String fileName)
+    public EasyImageWriter (Package pkg)
     {
-        this.setMagicNumber(p.getMagicNumber());
-        this.setWidth(p.getWidth());
-        this.setHeight(p.getHeight());
-        this.setMaxGrayValue(p.getMaxGrayValue());
-        this.setImage(p.getImage());
-        this.setFileName(fileName);
+        this.setMagicNumber(pkg.getMagicNumber());
+        this.setWidth(pkg.getWidth());
+        this.setHeight(pkg.getHeight());
+        this.setMaxGrayValue(pkg.getMaxGrayValue());
+        this.setImage(pkg.getImage());
+        this.setFileName(pkg.getFileName());
     }
 
     /**

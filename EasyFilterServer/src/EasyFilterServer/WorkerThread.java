@@ -41,7 +41,8 @@ class WorkerThread extends Thread{
     @Override
     public void run() {
         Package p = (Package)this.getCi().receiveFile();
-        EasyImageWriter eiw = new EasyImageWriter(p,"MegaTest.pgm");
+        // Writes the modified image with the same name
+        EasyImageWriter eiw = new EasyImageWriter(p);
         eiw.write();
     }
 

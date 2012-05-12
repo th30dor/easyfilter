@@ -16,22 +16,22 @@ import java.io.Serializable;
 public class Package implements Serializable
 {
     /**
-     * int image magicNumber
+     * image magicNumber
      */
     private String magicNumber;
 
     /**
-     * int image width
+     * image width
      */
     private int width;
 
     /**
-     * int image height
+     * image height
      */
     private int height;
 
     /**
-     * int image maxGrayValue
+     * image maxGrayValue
      */
     private int maxGrayValue;
 
@@ -39,6 +39,18 @@ public class Package implements Serializable
      * Holds the pgm image values
      */
     private int[][] image;
+
+    /**
+     * file name
+     */
+    private String fileName;
+
+    /**
+     * request type
+     * 0 - get new modified image
+     * 1 - get an image already saved on the server
+     */
+    private int requestType;
 
     /**
      * Constructor
@@ -50,13 +62,15 @@ public class Package implements Serializable
      * @param image[][]    the pgm image values
      */
     public Package (String magicNumber, int width, int height,
-        int maxGrayValue, int image[][]
+        int maxGrayValue, int image[][], String fileName, int requestType
     ) {
         this.setMagicNumber(magicNumber);
         this.setWidth(width);
         this.setHeight(height);
         this.setMaxGrayValue(maxGrayValue);
         this.setImage(image);
+        this.setFileName(fileName);
+        this.setRequestType(requestType);
     }
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
@@ -99,5 +113,21 @@ public class Package implements Serializable
 
     private void setImage(int[][] image) {
         this.image = image;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    private void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public int getRequestType() {
+        return requestType;
+    }
+
+    private void setRequestType(int requestType) {
+        this.requestType = requestType;
     }
 }

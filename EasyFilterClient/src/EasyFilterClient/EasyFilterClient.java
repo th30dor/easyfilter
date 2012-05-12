@@ -20,30 +20,38 @@ import java.net.UnknownHostException;
 public class EasyFilterClient
 {
     /**
-     * Main method
+     * Main client method
      */
     public static void main(String[] args)
         throws UnknownHostException, IOException
     {
-        // Read the input file
-        EasyImageReader inputFile = new EasyImageReader("images/garfield2.pgm");
+        // read the input file
+        String fileName = "images/garfield2.pgm";
+        EasyImageReader inputFile = new EasyImageReader(fileName);
 
-        // test: verificam fisierul de configurare
-        EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
-        System.out.println("config: " + props.readProperty("important", "p1"));
+//        // test: verificam fisierul de configurare
+//        EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
+//        System.out.println("config: " + props.readProperty("important", "p1"));
 
+        // get server IP
         // test: verificare tirmitere fisier
         String serverIP = new String("127.0.0.1");
         int serverPort = 5001;
         TestSendFile tsf = new TestSendFile(serverIP, serverPort);
+        
+        // send request
 
+        // todo: fileName trebuie parsat: sa ramana doar numele fisierului,
+        // fara folderele din fata.
         // Test send file to server
         tsf.sendFile(new Package(
             inputFile.getMagicNumber(),
             inputFile.getWidth(),
             inputFile.getHeight(),
             inputFile.getMaxGrayValue(),
-            inputFile.getImage()
+            inputFile.getImage(),
+            fileName,
+            0
         ));
 
 //        // test: Write the output file
