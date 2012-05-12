@@ -1,6 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
 package EasyFilterServer;
 
@@ -14,63 +18,89 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author TEO
+ * Handles the blocking TCP connection module
  */
-public class BlockingTcpConnection implements CommunicationInterface  {
+public class BlockingTcpConnection implements CommunicationInterface
+{
+    /**
+     * The server socket
+     */
+    static ServerSocket serverSocket;
 
-     static ServerSocket serverSocket;
-     private Socket clientSocket = null;
-    
+    /**
+     * The client socket
+     */
+    private Socket clientSocket = null;
+
+    /**
+     * Opens a socket with the data read from the config file;
+     * Used to communicate with the client/other server instances
+     */
     @Override
-    public void openConnection() {
+    public void openConnection()
+    {
         try {
             EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
-            
+
             // Open connection to server
-            this.setServerSocket(new ServerSocket(Integer.parseInt(epr.readProperty("Address", "port"))));
-            
-            
-            
+            this.setServerSocket(
+                new ServerSocket(Integer.parseInt(epr.readProperty("Address", "port")))
+            );
         } catch (IOException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-
-
+    /**
+     * Whether the connection is successfully created or not
+     *
+     * @return bool
+     */
     @Override
-    public boolean connectionAccepted() {
-        
-            try {
-                // open client connection
-                this.setClientSocket(this.getServerSocket().accept());
-                 
-            } catch (Exception e) {
-                System.err.println("Eroare la accept: " + e);
-                e.printStackTrace();
-                return false;
-            }
-            return true;
+    public boolean connectionAccepted()
+    {
+        try {
+            // open client connection
+            this.setClientSocket(this.getServerSocket().accept());
+        } catch (Exception e) {
+            System.err.println("Accept error: " + e);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-
+    /**
+     * Sends a file to either a client or other servers
+     *
+     * @param obj the object to be sent
+     *
+     * @return void
+     */
     @Override
-    public void sendFile(Object obj) {
+    public void sendFile(Object obj)
+    {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Receives an Object from either a client or other servers
+     *
+     * @return the object received
+     */
     @Override
     public Object receiveFile()
     {
-        
         InputStream is = null;
+        ObjectInputStream ois = null;
+        common.Package pkg = null;
+
+        // open the object input stream
         try {
             is = clientSocket.getInputStream();
         } catch (IOException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ObjectInputStream ois = null;
         try {
             ois = new ObjectInputStream(is);
         } catch (IOException ex) {
@@ -78,7 +108,6 @@ public class BlockingTcpConnection implements CommunicationInterface  {
         }
 
         // read the image as an object from the client
-        common.Package pkg = null;
         try {
             pkg = (common.Package)ois.readObject();
         } catch (IOException ex) {
@@ -86,24 +115,25 @@ public class BlockingTcpConnection implements CommunicationInterface  {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return pkg;
     }
-    
+
+    // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
+
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
 
-    public void setServerSocket(ServerSocket serverSocket) {
+    private void setServerSocket(ServerSocket serverSocket) {
         BlockingTcpConnection.serverSocket = serverSocket;
     }
-        
+
     public Socket getClientSocket() {
         return clientSocket;
     }
 
-    public void setClientSocket(Socket clientSocket) {
+    private void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
-    
 }

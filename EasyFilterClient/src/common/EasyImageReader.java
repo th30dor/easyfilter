@@ -15,7 +15,8 @@ import java.util.Scanner;
 /**
  * Provides functionalities for reading an image
  */
-public class EasyImageReader {
+public class EasyImageReader
+{
     /**
      * image magicNumber
      */
@@ -46,7 +47,8 @@ public class EasyImageReader {
      *
      * @param fileName name of the file to be read
      */
-    public EasyImageReader (String fileName) {
+    public EasyImageReader (String fileName)
+    {
         this.getFileContents(fileName);
     }
 
@@ -57,7 +59,8 @@ public class EasyImageReader {
      *
      * @return void
      */
-    public void getFileContents (String fileName) {
+    public void getFileContents (String fileName)
+    {
         Scanner sc2 = null, s2;
         int wordCount = 0, i = 0, j = 0;
         int position, lineWidth;

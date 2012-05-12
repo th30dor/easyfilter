@@ -50,7 +50,8 @@ public class TestReceiveFile {
      *
      * @return void
      */
-    public void listen() throws IOException {
+    public void listen() throws IOException
+    {
         while (true) {
             Socket clientSocket = null;
 

@@ -13,7 +13,8 @@ import java.io.Serializable;
 /**
  * Wrapper for sending and receiving image files
  */
-public class Package implements Serializable {
+public class Package implements Serializable
+{
     /**
      * int image magicNumber
      */

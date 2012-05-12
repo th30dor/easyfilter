@@ -1,40 +1,44 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
 package EasyFilterServer;
 
 /**
- *
- * @author TEO
+ * Interface for communication modules
  */
-public interface CommunicationInterface {
-    
+public interface CommunicationInterface
+{
     /**
      * Opens a socket with the data read from the config file;
-     * used to communicate with the client/other server instances
+     * Used to communicate with the client/other server instances
      */
     void openConnection();
-    
+
     /**
-     * 
-     * @return true if a new connection is made
-     * blocks otherwise
+     * Whether the connection is successfully created or not
+     *
+     * @return bool
      */
     boolean connectionAccepted();
-    
+
     /**
-     * sends a file to either the client or other servers
-     * 
+     * Sends a file to either a client or other servers
+     *
      * @param obj the object to be sent
+     *
+     * @return void
      */
     void sendFile(Object obj);
-    
+
     /**
-     * receives an Object
+     * Receives an Object from either a client or other servers
+     *
      * @return the object received
      */
     Object receiveFile();
-    
-    
 }

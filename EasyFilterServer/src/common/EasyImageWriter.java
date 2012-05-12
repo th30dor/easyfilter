@@ -14,7 +14,8 @@ import java.io.FileWriter;
 /**
  * Provides functionalities for writing an image
  */
-public final class EasyImageWriter {
+public final class EasyImageWriter
+{
     /**
      * int image magicNumber
      */
@@ -72,7 +73,8 @@ public final class EasyImageWriter {
      * @param p        package to be written              
      * @param fileName file name
      */
-    public EasyImageWriter (Package p, String fileName) {
+    public EasyImageWriter (Package p, String fileName)
+    {
         this.setMagicNumber(p.getMagicNumber());
         this.setWidth(p.getWidth());
         this.setHeight(p.getHeight());
@@ -86,7 +88,8 @@ public final class EasyImageWriter {
      *
      * @return void
      */
-    public void write () {
+    public void write ()
+    {
         try {
             int i,j;
             // Create file
@@ -158,5 +161,4 @@ public final class EasyImageWriter {
     private void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
 }

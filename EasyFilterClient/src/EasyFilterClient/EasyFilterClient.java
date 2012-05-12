@@ -17,8 +17,8 @@ import java.net.UnknownHostException;
 /**
  * Main client class
  */
-public class EasyFilterClient {
-
+public class EasyFilterClient
+{
     /**
      * Main method
      */

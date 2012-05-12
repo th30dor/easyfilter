@@ -14,7 +14,8 @@ import org.ini4j.*;
 /**
  * Reads properties from the configuration file ( "config/config.ini" )
  */
-public class EasyPropertiesReader {
+public class EasyPropertiesReader
+{
     /**
      * Ini file parser
      */
@@ -25,7 +26,8 @@ public class EasyPropertiesReader {
      *
      * @param fileName
      */
-    public EasyPropertiesReader(String fileName) {
+    public EasyPropertiesReader(String fileName)
+    {
         try {
             this.setIni(new Ini(new File(fileName)));
         } catch (Exception e) {
@@ -43,7 +45,8 @@ public class EasyPropertiesReader {
      *
      * @return String corresponding value
      */
-    public String readProperty(String section, String key) {
+    public String readProperty(String section, String key)
+    {
         Ini.Section sc = this.getIni().get(section);
         return sc.get(key);
     }

@@ -18,7 +18,8 @@ import java.net.UnknownHostException;
 /**
  * Clasa de test pentru trimiterea de fisiere
  */
-public class TestSendFile {
+public class TestSendFile
+{
     private String serverIP;
     private int serverPort;
     Socket clientSocket;
@@ -48,7 +49,8 @@ public class TestSendFile {
      *
      * @return void
      */
-    public void sendFile(Package pkg) throws IOException {
+    public void sendFile(Package pkg) throws IOException
+    {
         // output stream - used to send the file
         OutputStream os = this.clientSocket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
