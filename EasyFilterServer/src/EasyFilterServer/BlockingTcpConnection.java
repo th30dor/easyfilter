@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author TEO
  */
-public class BlockingTcpConnection implements CommunicationInterface extends Object {
+public class BlockingTcpConnection implements CommunicationInterface  {
 
      static ServerSocket serverSocket;
      private Socket clientSocket = null;
