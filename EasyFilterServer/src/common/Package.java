@@ -60,6 +60,10 @@ public class Package implements Serializable
      * @param height       height of the image
      * @param maxGrayValue max gray value of the pgm
      * @param image[][]    the pgm image values
+     * @param fileName     file name
+     * @param requestType  request type
+     *                     0 - get new modified image
+     *                     1 - get an image already saved on the server
      */
     public Package (String magicNumber, int width, int height,
         int maxGrayValue, int image[][], String fileName, int requestType
@@ -69,6 +73,25 @@ public class Package implements Serializable
         this.setHeight(height);
         this.setMaxGrayValue(maxGrayValue);
         this.setImage(image);
+        this.setFileName(fileName);
+        this.setRequestType(requestType);
+    }
+
+    /**
+     * Constructor for an empty request
+     *
+     * @param fileName    file name
+     * @param requestType request type
+     *                    0 - get new modified image
+     *                    1 - get an image already saved on the server
+     */
+    public Package (String fileName, int requestType)
+    {
+        this.setMagicNumber(null);
+        this.setWidth(0);
+        this.setHeight(0);
+        this.setMaxGrayValue(0);
+        this.setImage(null);
         this.setFileName(fileName);
         this.setRequestType(requestType);
     }

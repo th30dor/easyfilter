@@ -25,34 +25,20 @@ public class EasyFilterClient
     public static void main(String[] args)
         throws UnknownHostException, IOException
     {
-        // read the input file
+        // todo: de luat din interfata grafica
         String fileName = "images/garfield2.pgm";
-        EasyImageReader inputFile = new EasyImageReader(fileName);
+        String configFilePath = "config/config.ini";
 
-//        // test: verificam fisierul de configurare
-//        EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
-//        System.out.println("config: " + props.readProperty("important", "p1"));
+        // get server IP and port from the config file
+        EasyPropertiesReader props = new EasyPropertiesReader(configFilePath);
+        String serverIP = props.readProperty("Address", "IP");
+        int serverPort = Integer.parseInt(props.readProperty("Address", "port"));
 
-        // get server IP
-        // test: verificare tirmitere fisier
-        String serverIP = new String("127.0.0.1");
-        int serverPort = 5001;
-        TestSendFile tsf = new TestSendFile(serverIP, serverPort);
-        
+        // send the package to a server
+        // todo remove test:
         // send request
-
-        // todo: fileName trebuie parsat: sa ramana doar numele fisierului,
-        // fara folderele din fata.
-        // Test send file to server
-        tsf.sendFile(new Package(
-            inputFile.getMagicNumber(),
-            inputFile.getWidth(),
-            inputFile.getHeight(),
-            inputFile.getMaxGrayValue(),
-            inputFile.getImage(),
-            fileName,
-            0
-        ));
+        TestSendFile tsf = new TestSendFile(serverIP, serverPort);
+        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
 
 //        // test: Write the output file
 //        EasyImageWriter eiw = new EasyImageWriter(
@@ -60,5 +46,61 @@ public class EasyFilterClient
 //            inputFile.getMaxGrayValue(), inputFile.image, "images/test.pgm"
 //        );
 //        eiw.write();
+    }
+
+    /**
+     * Prepares a package before sending it to a server
+     *
+     * @param filePath    path to the local file to be uploaded
+     * @param requestType request type
+     *                    0 - get new modified image
+     *                    1 - get an image already saved on the server
+     * @return the package that will be sent to the server
+     */
+    public static Package preparePackage(String filePath, int requestType)
+    {
+        // the package that will be sent
+        Package pkg = null;
+
+        switch (requestType) {
+            default: case 0:
+                // read the input file
+                EasyImageReader inputFile = new EasyImageReader(filePath);
+                // create a package with the read image
+                pkg = new Package(
+                    inputFile.getMagicNumber(),
+                    inputFile.getWidth(),
+                    inputFile.getHeight(),
+                    inputFile.getMaxGrayValue(),
+                    inputFile.getImage(),
+                    EasyFilterClient.parseFilePath(filePath),
+                    requestType
+                );
+                break;
+            case 1:
+                // create a package with only an image name
+                pkg = new Package(filePath, requestType);
+                break;
+        }
+
+        return pkg;
+    }
+
+    /**
+     * Gets the file name from a path
+     *
+     * @param filePath
+     *
+     * @return file name
+     */
+    private static String parseFilePath(String filePath)
+    {
+        // unix
+        int lastIndex = filePath.lastIndexOf("/");
+        if (lastIndex == -1) {
+            // windows
+            lastIndex = filePath.lastIndexOf("\\");
+        }
+        return filePath.substring(lastIndex+1);
     }
 }
