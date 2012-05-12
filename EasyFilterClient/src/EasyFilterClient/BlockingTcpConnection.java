@@ -63,16 +63,8 @@ public class BlockingTcpConnection implements ClientCommunicationInterface
             ObjectOutputStream oos = new ObjectOutputStream(os);
             // actual sending of the image object
             oos.writeObject(pkg);
-            oos.close();
-            os.close();
         } catch (IOException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                os.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 
@@ -90,7 +82,7 @@ public class BlockingTcpConnection implements ClientCommunicationInterface
 
         // open the object input stream
         try {
-            is = clientSocket.getInputStream();
+            is = this.getClientSocket().getInputStream();
         } catch (IOException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }

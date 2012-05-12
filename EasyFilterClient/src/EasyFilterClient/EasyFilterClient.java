@@ -10,6 +10,7 @@ package EasyFilterClient;
 
 import common.EasyPropertiesReader;
 import common.EasyImageReader;
+import common.EasyImageWriter;
 import common.Package;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -28,6 +29,7 @@ public class EasyFilterClient
         // todo: de luat din interfata grafica
         String fileName = "images/garfield2.pgm";
         String configFilePath = "config/config.ini";
+        common.Package pkg = null;
 
 //        // get server IP and port from the config file
 //        EasyPropertiesReader props = new EasyPropertiesReader(configFilePath);
@@ -38,8 +40,10 @@ public class EasyFilterClient
         BlockingTcpConnection btc = new BlockingTcpConnection();
         btc.openConnection();
         btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
-        // todo receive dupa ce trimite server-ul ceva..
-        
+
+        // receive file from server
+        pkg = btc.receiveRequest();
+
 //         send the package to a server
 //         todo remove test:
 //         send request
@@ -47,11 +51,8 @@ public class EasyFilterClient
 //        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
 
 //        // test: Write the output file
-//        EasyImageWriter eiw = new EasyImageWriter(
-//            inputFile.getWidth(), inputFile.getHeight(),
-//            inputFile.getMaxGrayValue(), inputFile.image, "images/test.pgm"
-//        );
-//        eiw.write();
+        EasyImageWriter eiw = new EasyImageWriter(pkg);
+        eiw.write();
     }
 
     /**

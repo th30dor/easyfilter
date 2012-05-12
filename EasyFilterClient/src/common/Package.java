@@ -134,7 +134,7 @@ public class Package implements Serializable
         return image;
     }
 
-    private void setImage(int[][] image) {
+    public void setImage(int[][] image) {
         this.image = image;
     }
 

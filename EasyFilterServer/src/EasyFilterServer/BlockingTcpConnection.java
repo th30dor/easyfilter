@@ -12,6 +12,8 @@ import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -80,7 +82,23 @@ public class BlockingTcpConnection implements CommunicationInterface
     @Override
     public void sendFile(Object obj)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        OutputStream os = null;
+        try {
+            os = this.getClientSocket().getOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            // actual sending of the image object
+            oos.writeObject(obj);
+            oos.close();
+            os.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                os.close();
+            } catch (IOException ex) {
+                Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**

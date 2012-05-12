@@ -40,9 +40,17 @@ class WorkerThread extends Thread{
      */
     @Override
     public void run() {
-        Package p = (Package)this.getCi().receiveFile();
+        Package pkg = (Package)this.getCi().receiveFile();
+
+        // apply filter
+//        pkg.setImage(FilterApplier.applyFilter(pkg.getWidth(), pkg.getHeight(), pkg.getImage()));
+
+        // send the file back to the client
+        this.getCi().sendFile(pkg);
+
+        // todo remove test:
         // Writes the modified image with the same name
-        EasyImageWriter eiw = new EasyImageWriter(p);
+        EasyImageWriter eiw = new EasyImageWriter(pkg);
         eiw.write();
     }
 
