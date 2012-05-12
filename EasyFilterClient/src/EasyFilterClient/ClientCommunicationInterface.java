@@ -10,6 +10,7 @@ package EasyFilterClient;
 
 /**
  * Interface for Client Communication modules
+ * Used by the graphical interface
  */
 public interface ClientCommunicationInterface {
     /**
@@ -22,12 +23,12 @@ public interface ClientCommunicationInterface {
      *
      * @param Package instance to be sent
      */
-    public void sendRequest(Package pkg);
+    public void sendRequest(common.Package pkg);
 
     /**
-     * Sends a request to a server
+     * Receive an image from the server
      *
      * @return Package instance sent by the server
      */
-    public Package receiveRequest();
+    public common.Package receiveRequest();
 }

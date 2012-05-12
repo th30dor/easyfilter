@@ -29,16 +29,22 @@ public class EasyFilterClient
         String fileName = "images/garfield2.pgm";
         String configFilePath = "config/config.ini";
 
-        // get server IP and port from the config file
-        EasyPropertiesReader props = new EasyPropertiesReader(configFilePath);
-        String serverIP = props.readProperty("Address", "IP");
-        int serverPort = Integer.parseInt(props.readProperty("Address", "port"));
+//        // get server IP and port from the config file
+//        EasyPropertiesReader props = new EasyPropertiesReader(configFilePath);
+//        String serverIP = props.readProperty("Address", "IP");
+//        int serverPort = Integer.parseInt(props.readProperty("Address", "port"));
 
-        // send the package to a server
-        // todo remove test:
-        // send request
-        TestSendFile tsf = new TestSendFile(serverIP, serverPort);
-        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
+        // simulate graphic interface for blocking TCP
+        BlockingTcpConnection btc = new BlockingTcpConnection();
+        btc.openConnection();
+        btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
+        // todo receive dupa ce trimite server-ul ceva..
+        
+//         send the package to a server
+//         todo remove test:
+//         send request
+//        TestSendFile tsf = new TestSendFile(serverIP, serverPort);
+//        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
 
 //        // test: Write the output file
 //        EasyImageWriter eiw = new EasyImageWriter(

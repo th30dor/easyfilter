@@ -52,7 +52,7 @@ public class TestSendFile
     public void sendFile(Package pkg) throws IOException
     {
         // output stream - used to send the file
-        OutputStream os = this.clientSocket.getOutputStream();
+        OutputStream os = this.getClientSocket().getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
 
         // actual sending of the image object
