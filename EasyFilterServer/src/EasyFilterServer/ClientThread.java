@@ -61,6 +61,10 @@ class ClientThread extends Thread
             // determine the type of the request (image or end connection)
             switch (pkg.getRequestType()) {
             case 0:
+                // create a new thread to handle the image transformation
+                // on the other servers
+                //todo
+                
                 // apply filter
                 pkg.setImage(
                     FilterApplier.applyFilter(
