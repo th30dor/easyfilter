@@ -67,7 +67,7 @@ public class EasyFilterClient
 //        }
 
 //        // send close request to server
-            btc.sendRequest(EasyFilterClient.preparePackage(null, 1337));
+            btc.sendRequest(EasyFilterClient.preparePackage("Exit", 1337));
 //        System.out.println("connection closed");
 
 //         send the package to a server
