@@ -36,14 +36,14 @@ public interface CommunicationInterface
     void sendFile(Object obj);
 
     /**
-     * Closes the connection to a client / server
-     */
-    public void closeConnection ();
-
-    /**
      * Receives an Object from either a client or other servers
      *
      * @return the object received
      */
     Object receiveFile();
+
+    /**
+     * Closes the connection to a client / server
+     */
+    public void closeConnection ();
 }

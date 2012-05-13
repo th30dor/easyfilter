@@ -45,7 +45,7 @@ public class OneThreadPerSocket
         while(true) {
             // creates a new thread for each new connection
             CommunicationInterface localCi = instanceFactory();
-            if (localCi.connectionAccepted()){
+            if (localCi.connectionAccepted()) {
                 ClientThread wt = new ClientThread(localCi);
                 wt.start();
             }
@@ -66,10 +66,10 @@ public class OneThreadPerSocket
 
          // set the connection type
          if(requestType.equals("tcp")) {
-             return new BlockingTcpConnection();
+             return new ClientBlockingTcpConnection();
          } else {
              //TODO alte cazuri
-             return new BlockingTcpConnection();
+             return new ClientBlockingTcpConnection();
          }
     }
 

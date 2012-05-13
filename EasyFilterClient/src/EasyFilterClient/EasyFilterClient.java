@@ -27,7 +27,7 @@ public class EasyFilterClient
         throws UnknownHostException, IOException
     {
         // todo: de luat din interfata grafica
-        String fileName = "images/garfield2.pgm";
+        String fileName = "images/client_garfield.pgm";
         String configFilePath = "config/config.ini";
         common.Package pkg = null;
 
@@ -41,15 +41,15 @@ public class EasyFilterClient
         btc.openConnection();
 
         // test 3x send-receive new files + close
-//        System.out.println("conn open");
-//        for ( int i = 0; i < 3; i ++ ) {
-//            // send request to server
-//            btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
-//            System.out.println("request sent");
-//            // receive file from server
-//            pkg = btc.receiveRequest();
-//            System.out.println("request recvd");
-//        }
+            System.out.println("conn open");
+            for ( int i = 0; i < 1; i ++ ) {
+                // send request to server
+                btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
+                System.out.println("request sent");
+                // receive file from server
+                pkg = btc.receiveRequest();
+                System.out.println("request recvd");
+            }
 
 //         test send-receive existing files
 //        System.out.println("conn open");
@@ -77,8 +77,8 @@ public class EasyFilterClient
 //        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
 
 //        // test: Write the output file
-//        EasyImageWriter eiw = new EasyImageWriter(pkg);
-//        eiw.write();
+            EasyImageWriter eiw = new EasyImageWriter(pkg);
+            eiw.write();
     }
 
     /**

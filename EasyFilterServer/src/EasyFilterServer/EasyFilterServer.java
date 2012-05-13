@@ -20,22 +20,31 @@ public class EasyFilterServer
 {
     // vector of server IPs
     private static Vector<String> serverIPs;
+    // the port on which all servers communicate with eachother
+    private static int serversListenPort;
 
     public static void main(String[] args)
         throws UnknownHostException, IOException
     {
         // Read the other servers` IPs from config.ini
         EasyFilterServer.readServerIPs();
-//        OneThreadPerSocket otps = new OneThreadPerSocket(new BlockingTcpConnection());
-//        otps.acceptConnections();
+
+        // accept connections from the other servers
+        InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
+        isc.start();
+
+        // accept connections from the clients
+        OneThreadPerSocket otps = new OneThreadPerSocket(new ClientBlockingTcpConnection());
+        otps.acceptConnections();
+
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);
 //        trf.listen();
     }
 
     /**
-     * Reads the server IPs from the config file
-     * Remembers them locally
+     * Reads the server IPs from the config file and remembers them locally
+     * The local server is not included in the config file
      */
     public static void readServerIPs ()
     {
@@ -46,6 +55,7 @@ public class EasyFilterServer
 
         // Read config settings for servers
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
+        EasyFilterServer.setServersListenPort(Integer.parseInt(props.readProperty("Servers", "port")));
         servers_number = Integer.parseInt(props.readProperty("Servers", "servers_number"));
 
         // Remember server IPs
@@ -63,5 +73,13 @@ public class EasyFilterServer
 
     private static void setServerIPs(Vector<String> serverIPs) {
         EasyFilterServer.serverIPs = serverIPs;
+    }
+
+    public static int getServersListenPort() {
+        return serversListenPort;
+    }
+
+    private static void setServersListenPort(int serversListenPort) {
+        EasyFilterServer.serversListenPort = serversListenPort;
     }
 }

@@ -14,6 +14,13 @@ import common.Package;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +59,7 @@ class ClientThread extends Thread
 
         // receive packages from the client
         while (clientIsAlive) {
-            Package pkg = (Package)this.getCi().receiveFile();
+            common.Package pkg = (common.Package)this.getCi().receiveFile();
 
 //            System.out.println("server primeste filename: "
 //                + pkg.getFileName()
@@ -61,16 +68,12 @@ class ClientThread extends Thread
             // determine the type of the request (image or end connection)
             switch (pkg.getRequestType()) {
             case 0:
-                // create a new thread to handle the image transformation
-                // on the other servers
-                //todo
-                
-                // apply filter
-                pkg.setImage(
-                    FilterApplier.applyFilter(
-                        pkg.getWidth(), pkg.getHeight(), pkg.getImage()
-                    )
-                );
+                try {
+                    // handle the image transformation on all the servers
+                    this.processImageOnServers(pkg);
+                } catch (Exception ex) {
+                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                 // send the file back to the client
                 this.getCi().sendFile(pkg);
@@ -125,6 +128,109 @@ class ClientThread extends Thread
         // send the file back to the client
         this.getCi().sendFile(pkg);
     }
+    
+    /**
+     * Handle the image transformation on all the servers
+     * Modifies the original pkg image
+     * 
+     * @param pkg image received from the client
+     * 
+     * @return void
+     */
+    private void processImageOnServers(common.Package pkg)
+        throws UnknownHostException, IOException
+    {
+        int i, j, k, chunkSize, packageOrder;
+        int servers_number = EasyFilterServer.getServerIPs().size();
+        int [][] partialImage;
+        common.Package chunkPackage = null;
+        OutputStream os = null;
+        InputStream is = null;
+        ObjectInputStream ois = null;
+        
+        // open sockets to other servers
+        Vector<Socket> serverList = new Vector<Socket>();
+        for (i = 0; i <= servers_number; i++) {
+            serverList.add(new Socket(
+                EasyFilterServer.getServerIPs().elementAt(i),
+                EasyFilterServer.getServersListenPort()
+            ));
+        }
+        
+        // get the number of lines in a chunk for each server;
+        // the local server will transform the last chunk
+        chunkSize = pkg.getHeight() / (servers_number + 1);
+        
+        // send image chunks to other servers
+        for (i = 0; i < servers_number; i++) {
+            // create partial image
+            partialImage = new int[chunkSize][pkg.getWidth()];
+            for (j = i * chunkSize; j < (i + 1) * chunkSize; j ++ ) {
+                for (k = 0; k < pkg.getWidth(); k++) {
+                    partialImage[j - i * chunkSize][k] = pkg.getImage()[j][k];
+                }
+            }
+            
+            // 100 + i refers to the server order
+            chunkPackage = new common.Package(
+                pkg.getMagicNumber(),
+                pkg.getWidth(),
+                chunkSize,
+                pkg.getMaxGrayValue(),
+                partialImage,
+                pkg.getFileName(),
+                100 + i
+            );
+            
+            // send the package to the other servers
+            // todo modifica in apleuri de interfata ( aici se foloseste TCP specific )
+            try {
+                os = serverList.get(i).getOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(os);
+                // actual sending of the image chunk object
+                oos.writeObject(chunkPackage);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } // for servers_number 
+        
+        // process the last chunk locally
+        // create partial image
+        partialImage = new int[pkg.getHeight() - chunkSize][pkg.getWidth()];
+        // i is the last sent line
+        for (j = i * chunkSize; j < pkg.getHeight(); j ++ ) {
+            for (k = 0; k < pkg.getWidth(); k++) {
+                // process last chunk
+                partialImage[j - i * chunkSize][k] = pkg.getImage()[j][k];
+            }
+        }
+        // overwrite the initial image
+        partialImage = FilterApplier.applyFilter(
+            pkg.getWidth(), pkg.getHeight() - chunkSize, partialImage
+        );
+        
+        // get chunks from other servers
+        for (i = 0; i < servers_number; i++) {
+            is = serverList.get(i).getInputStream();
+            ois = new ObjectInputStream(is);
+            try {
+                chunkPackage = (common.Package)ois.readObject();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // get the package position in the initial image
+            packageOrder = chunkPackage.getRequestType() - 100;
+            
+            // overwrite the initial image with the current chunk
+            for (j = 0; j < chunkPackage.getHeight(); j ++) {
+                for (k = 0; k < chunkPackage.getWidth(); k ++ ) {
+                    pkg.getImage()[j + packageOrder * chunkSize][k] = chunkPackage.getImage()[j][k]; 
+                }
+            }
+        }
+    }
+    
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
 
     public CommunicationInterface getCi() {

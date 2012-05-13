@@ -20,9 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Handles the blocking TCP connection module
+ * Handles the blocking TCP connection module for server-client
  */
-public class BlockingTcpConnection implements CommunicationInterface
+public class ClientBlockingTcpConnection implements CommunicationInterface
 {
     /**
      * The server socket
@@ -49,7 +49,7 @@ public class BlockingTcpConnection implements CommunicationInterface
                 new ServerSocket(Integer.parseInt(epr.readProperty("Address", "port")))
             );
         } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -88,20 +88,7 @@ public class BlockingTcpConnection implements CommunicationInterface
             // actual sending of the image object
             oos.writeObject(obj);
         } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Closes the connection to a client / server
-     */
-    @Override
-    public void closeConnection ()
-    {
-        try {
-            this.getClientSocket().close();
-        } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -121,24 +108,37 @@ public class BlockingTcpConnection implements CommunicationInterface
         try {
             is = clientSocket.getInputStream();
         } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             ois = new ObjectInputStream(is);
         } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         // read the image as an object from the client
         try {
             pkg = (common.Package)ois.readObject();
         } catch (IOException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return pkg;
+    }
+
+    /**
+     * Closes the connection to a client / server
+     */
+    @Override
+    public void closeConnection ()
+    {
+        try {
+            this.getClientSocket().close();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
@@ -147,8 +147,8 @@ public class BlockingTcpConnection implements CommunicationInterface
         return serverSocket;
     }
 
-    private void setServerSocket(ServerSocket serverSocket) {
-        BlockingTcpConnection.serverSocket = serverSocket;
+    protected void setServerSocket(ServerSocket serverSocket) {
+        ClientBlockingTcpConnection.serverSocket = serverSocket;
     }
 
     public Socket getClientSocket() {
