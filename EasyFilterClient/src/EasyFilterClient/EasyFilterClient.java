@@ -44,11 +44,13 @@ public class EasyFilterClient
             System.out.println("conn open");
             for ( int i = 0; i < 1; i ++ ) {
                 // send request to server
-                btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
+                btc.sendRequest(
+                        EasyFilterClient.preparePackage(fileName, 0)
+                );
                 System.out.println("request sent");
                 // receive file from server
                 pkg = btc.receiveRequest();
-                System.out.println("request recvd");
+                System.out.println("request received");
             }
 
 //         test send-receive existing files

@@ -63,7 +63,9 @@ public class ClientBlockingTcpConnection implements CommunicationInterface
     {
         try {
             // open client connection
+            System.out.println("before getServerSocket accept ");
             this.setClientSocket(this.getServerSocket().accept());
+            System.out.println("after getServerSocket accept ");
         } catch (Exception e) {
             System.err.println("Accept error: " + e);
             return false;
@@ -147,7 +149,7 @@ public class ClientBlockingTcpConnection implements CommunicationInterface
         return serverSocket;
     }
 
-    protected void setServerSocket(ServerSocket serverSocket) {
+    private void setServerSocket(ServerSocket serverSocket) {
         ClientBlockingTcpConnection.serverSocket = serverSocket;
     }
 
@@ -155,7 +157,7 @@ public class ClientBlockingTcpConnection implements CommunicationInterface
         return clientSocket;
     }
 
-    private void setClientSocket(Socket clientSocket) {
+    protected void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 }

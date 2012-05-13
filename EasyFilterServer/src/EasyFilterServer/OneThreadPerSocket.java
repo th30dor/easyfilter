@@ -41,11 +41,12 @@ public class OneThreadPerSocket
     {
         // opens the server socket
         this.getCi().openConnection();
-
+        System.out.println("opened connection");
         while(true) {
             // creates a new thread for each new connection
             CommunicationInterface localCi = instanceFactory();
             if (localCi.connectionAccepted()) {
+                System.out.println("before client thread");
                 ClientThread wt = new ClientThread(localCi);
                 wt.start();
             }

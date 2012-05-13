@@ -20,6 +20,11 @@ import java.util.logging.Logger;
 public class ServerBlockingTcpConnection extends ClientBlockingTcpConnection
 {
     /**
+     * The server socket
+     */
+    ServerSocket nonStaticServerSocket;
+
+    /**
      * Opens a socket with the data read from the config file;
      * Used to communicate with the client/other server instances
      */
@@ -36,5 +41,16 @@ public class ServerBlockingTcpConnection extends ClientBlockingTcpConnection
         } catch (IOException ex) {
             Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
+
+    @Override
+    public ServerSocket getServerSocket() {
+        return this.nonStaticServerSocket;
+    }
+
+    private void setServerSocket(ServerSocket serverSocket) {
+        this.nonStaticServerSocket = serverSocket;
     }
 }

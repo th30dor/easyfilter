@@ -61,9 +61,9 @@ class ClientThread extends Thread
         while (clientIsAlive) {
             common.Package pkg = (common.Package)this.getCi().receiveFile();
 
-//            System.out.println("server primeste filename: "
-//                + pkg.getFileName()
-//                + " si request type: " + pkg.getRequestType());
+            System.out.println("server primeste filename: "
+                + pkg.getFileName()
+                + " si request type: " + pkg.getRequestType());
 
             // determine the type of the request (image or end connection)
             switch (pkg.getRequestType()) {
@@ -140,6 +140,7 @@ class ClientThread extends Thread
     private void processImageOnServers(common.Package pkg)
         throws UnknownHostException, IOException
     {
+        System.out.println("start processImageOnServers ");
         int i, j, k, chunkSize, packageOrder;
         int servers_number = EasyFilterServer.getServerIPs().size();
         int [][] partialImage;
@@ -150,7 +151,7 @@ class ClientThread extends Thread
         
         // open sockets to other servers
         Vector<Socket> serverList = new Vector<Socket>();
-        for (i = 0; i <= servers_number; i++) {
+        for (i = 0; i < servers_number; i++) {
             serverList.add(new Socket(
                 EasyFilterServer.getServerIPs().elementAt(i),
                 EasyFilterServer.getServersListenPort()
@@ -188,7 +189,9 @@ class ClientThread extends Thread
                 os = serverList.get(i).getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 // actual sending of the image chunk object
+                System.out.println("Before server oos.writeObject");
                 oos.writeObject(chunkPackage);
+                System.out.println("After server oos.writeObject");
             } catch (IOException ex) {
                 Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -204,7 +207,8 @@ class ClientThread extends Thread
                 partialImage[j - i * chunkSize][k] = pkg.getImage()[j][k];
             }
         }
-        // overwrite the initial image
+
+        // overwrite the initial image with the last chunk
         partialImage = FilterApplier.applyFilter(
             pkg.getWidth(), pkg.getHeight() - chunkSize, partialImage
         );
@@ -229,7 +233,14 @@ class ClientThread extends Thread
                 }
             }
         }
-    }
+        
+        // overwrite the last chunk
+        for (i = servers_number * chunkSize; i < pkg.getHeight(); i ++) {
+            for (k = 0; k < pkg.getWidth(); k ++ ) {
+                pkg.getImage()[i][k] = partialImage[i - servers_number * chunkSize][k]; 
+            }
+        }
+    } // end processImageOnServers
     
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
 
