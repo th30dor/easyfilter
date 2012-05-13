@@ -66,7 +66,6 @@ public class BlockingTcpConnection implements CommunicationInterface
             this.setClientSocket(this.getServerSocket().accept());
         } catch (Exception e) {
             System.err.println("Accept error: " + e);
-            e.printStackTrace();
             return false;
         }
         return true;
@@ -88,16 +87,21 @@ public class BlockingTcpConnection implements CommunicationInterface
             ObjectOutputStream oos = new ObjectOutputStream(os);
             // actual sending of the image object
             oos.writeObject(obj);
-            oos.close();
-            os.close();
         } catch (IOException ex) {
             Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                os.close();
-            } catch (IOException ex) {
-                Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
+    }
+
+    /**
+     * Closes the connection to a client / server
+     */
+    @Override
+    public void closeConnection ()
+    {
+        try {
+            this.getClientSocket().close();
+        } catch (IOException ex) {
+            Logger.getLogger(BlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

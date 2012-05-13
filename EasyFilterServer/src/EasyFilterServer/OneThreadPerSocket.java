@@ -13,7 +13,8 @@ import common.EasyPropertiesReader;
 /**
  * Handles the one thread per socket request type
  */
-public class OneThreadPerSocket {
+public class OneThreadPerSocket
+{
     /**
      * Instance of a class that implements CommunicationInterface
      * Will be set in the constructor
@@ -45,7 +46,7 @@ public class OneThreadPerSocket {
             // creates a new thread for each new connection
             CommunicationInterface localCi = instanceFactory();
             if (localCi.connectionAccepted()){
-                WorkerThread wt = new WorkerThread(localCi);
+                ClientThread wt = new ClientThread(localCi);
                 wt.start();
             }
         }

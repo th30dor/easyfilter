@@ -47,8 +47,9 @@ public class Package implements Serializable
 
     /**
      * request type
-     * 0 - get new modified image
-     * 1 - get an image already saved on the server
+     * 0    - get new modified image
+     * 1    - get an image already saved on the server
+     * 1337 - announces the server to close the connection
      */
     private int requestType;
 
@@ -62,8 +63,9 @@ public class Package implements Serializable
      * @param image[][]    the pgm image values
      * @param fileName     file name
      * @param requestType  request type
-     *                     0 - get new modified image
-     *                     1 - get an image already saved on the server
+     *                     0    - get new modified image
+     *                     1    - get an image already saved on the server
+     *                     1337 - announces the server to close the connection
      */
     public Package (String magicNumber, int width, int height,
         int maxGrayValue, int image[][], String fileName, int requestType
@@ -82,8 +84,9 @@ public class Package implements Serializable
      *
      * @param fileName    file name
      * @param requestType request type
-     *                    0 - get new modified image
-     *                    1 - get an image already saved on the server
+     *                    0    - get new modified image
+     *                    1    - get an image already saved on the server
+     *                    1337 - announces the server to close the connection
      */
     public Package (String fileName, int requestType)
     {

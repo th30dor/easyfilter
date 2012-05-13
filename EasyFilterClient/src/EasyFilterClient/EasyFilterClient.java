@@ -39,10 +39,20 @@ public class EasyFilterClient
         // simulate graphic interface for blocking TCP
         BlockingTcpConnection btc = new BlockingTcpConnection();
         btc.openConnection();
-        btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
 
-        // receive file from server
-        pkg = btc.receiveRequest();
+        // test 3x send-receive + close
+//        System.out.println("conn open");
+//        for ( int i = 0; i < 3; i ++ ) {
+//            // send request to server
+//            btc.sendRequest(EasyFilterClient.preparePackage(fileName, 0));
+//            System.out.println("request sent");
+//            // receive file from server
+//            pkg = btc.receiveRequest();
+//            System.out.println("request recvd");
+//        }
+//        // send close request to server
+        btc.sendRequest(EasyFilterClient.preparePackage(fileName, 1337));
+//        System.out.println("conn closed");
 
 //         send the package to a server
 //         todo remove test:
@@ -51,8 +61,8 @@ public class EasyFilterClient
 //        tsf.sendFile(EasyFilterClient.preparePackage(fileName, 0));
 
 //        // test: Write the output file
-        EasyImageWriter eiw = new EasyImageWriter(pkg);
-        eiw.write();
+//        EasyImageWriter eiw = new EasyImageWriter(pkg);
+//        eiw.write();
     }
 
     /**
