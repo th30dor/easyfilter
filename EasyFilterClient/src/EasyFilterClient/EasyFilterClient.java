@@ -40,7 +40,7 @@ public class EasyFilterClient
         BlockingTcpConnection btc = new BlockingTcpConnection();
         btc.openConnection();
 
-        // test 3x send-receive + close
+        // test 3x send-receive new files + close
 //        System.out.println("conn open");
 //        for ( int i = 0; i < 3; i ++ ) {
 //            // send request to server
@@ -50,9 +50,25 @@ public class EasyFilterClient
 //            pkg = btc.receiveRequest();
 //            System.out.println("request recvd");
 //        }
+
+//         test send-receive existing files
+//        System.out.println("conn open");
+//        for ( int i = 1; i <= 3; i ++ ) {
+//            fileName = new String("garfield"+i+".pgm");
+//
+//            // send request to server
+//            btc.sendRequest(EasyFilterClient.preparePackage(fileName, 1));
+//            System.out.println("request sent");
+//
+//            // receive file from server
+//            pkg = btc.receiveRequest();
+//            System.out.print("request type recvd:");
+//            System.out.println(pkg.getRequestType());
+//        }
+
 //        // send close request to server
-        btc.sendRequest(EasyFilterClient.preparePackage(fileName, 1337));
-//        System.out.println("conn closed");
+            btc.sendRequest(EasyFilterClient.preparePackage(null, 1337));
+//        System.out.println("connection closed");
 
 //         send the package to a server
 //         todo remove test:
@@ -70,8 +86,10 @@ public class EasyFilterClient
      *
      * @param filePath    path to the local file to be uploaded
      * @param requestType request type
-     *                    0 - get new modified image
-     *                    1 - get an image already saved on the server
+     *                    0    - get new modified image
+     *                    1    - get an image already saved on the server
+     *                    -1   - error code ( file not found )
+     *                    1337 - announces the server to close the connection
      * @return the package that will be sent to the server
      */
     public static Package preparePackage(String filePath, int requestType)
@@ -96,10 +114,15 @@ public class EasyFilterClient
                 break;
             case 1:
                 // create a package with only an image name
+                pkg = new Package(EasyFilterClient.parseFilePath(filePath), 1);
+                break;
+            case 1337:
                 pkg = new Package(filePath, requestType);
                 break;
         }
-
+//        System.out.println("client trimite filename: "
+//                + EasyFilterClient.parseFilePath(filePath)
+//                + " si request type: " + requestType);
         return pkg;
     }
 
@@ -112,6 +135,10 @@ public class EasyFilterClient
      */
     private static String parseFilePath(String filePath)
     {
+        if ( filePath == null) {
+            return filePath;
+        }
+
         // unix
         int lastIndex = filePath.lastIndexOf("/");
         if (lastIndex == -1) {

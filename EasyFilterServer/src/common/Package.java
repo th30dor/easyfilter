@@ -49,6 +49,7 @@ public class Package implements Serializable
      * request type
      * 0    - get new modified image
      * 1    - get an image already saved on the server
+     * -1   - error code ( file not found )
      * 1337 - announces the server to close the connection
      */
     private int requestType;
@@ -65,6 +66,7 @@ public class Package implements Serializable
      * @param requestType  request type
      *                     0    - get new modified image
      *                     1    - get an image already saved on the server
+     *                     -1   - error code ( file not found )
      *                     1337 - announces the server to close the connection
      */
     public Package (String magicNumber, int width, int height,
@@ -78,6 +80,28 @@ public class Package implements Serializable
         this.setFileName(fileName);
         this.setRequestType(requestType);
     }
+    
+    /**
+     * Constructor for EasyImageReader
+     *
+     * @param EasyImageReader read file data
+     * @param fileName        file name
+     * @param requestType     request type
+     *                        0    - get new modified image
+     *                        1    - get an image already saved on the server
+     *                        -1   - error code ( file not found )
+     *                        1337 - announces the server to close the connection
+     */
+    public Package (EasyImageReader eir, String fileName, int requestType)
+    {
+        this.setMagicNumber(eir.getMagicNumber());
+        this.setWidth(eir.getWidth());
+        this.setHeight(eir.getHeight());
+        this.setMaxGrayValue(eir.getMaxGrayValue());
+        this.setImage(eir.getImage());
+        this.setFileName(fileName);
+        this.setRequestType(requestType);
+    }
 
     /**
      * Constructor for an empty request
@@ -86,6 +110,7 @@ public class Package implements Serializable
      * @param requestType request type
      *                    0    - get new modified image
      *                    1    - get an image already saved on the server
+     *                    -1   - error code ( file not found )
      *                    1337 - announces the server to close the connection
      */
     public Package (String fileName, int requestType)

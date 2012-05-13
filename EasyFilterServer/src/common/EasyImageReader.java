@@ -116,6 +116,9 @@ public class EasyImageReader
                 wordCount ++;
             }
         }
+
+        //close Scanner
+        sc2.close();
     }
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
