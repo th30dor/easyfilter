@@ -30,12 +30,15 @@ public class EasyFilterServer
         EasyFilterServer.readServerIPs();
 
         // accept connections from the other servers
-        InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
-        isc.start();
+//        InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
+//        isc.start();
 
-        // accept connections from the clients
-        OneThreadPerSocket otps = new OneThreadPerSocket(new ClientBlockingTcpConnection());
-        otps.acceptConnections();
+        // accept connections from the clients on a separate thread
+//        OneThreadPerSocket otps = new OneThreadPerSocket(new ClientBlockingTcpConnection());
+//        otps.acceptConnections();
+//        
+        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(new ClientBlockingTcpConnection());
+        trpw.acceptConnections();
 
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);
