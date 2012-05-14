@@ -6,7 +6,7 @@
  * @author Marin Alexandru, 343 C1
  *
  */
-package EasyFilterServer;
+package EasyFilterServer.Communication;
 
 /**
  * Interface for communication modules

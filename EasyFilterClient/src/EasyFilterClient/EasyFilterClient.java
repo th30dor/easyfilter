@@ -8,6 +8,7 @@
  */
 package EasyFilterClient;
 
+import EasyFilterClient.Communication.BlockingTcpConnection;
 import common.EasyPropertiesReader;
 import common.EasyImageReader;
 import common.EasyImageWriter;
@@ -38,14 +39,15 @@ public class EasyFilterClient
 
         // simulate graphic interface for blocking TCP
         BlockingTcpConnection btc = new BlockingTcpConnection();
-        btc.openConnection();
 
         // test 3x send-receive new files + close
             System.out.println("conn open");
             for ( int i = 0; i < 1; i ++ ) {
+                // open a new connection for each new request
+                btc.openConnection();
                 // send request to server
                 btc.sendRequest(
-                        EasyFilterClient.preparePackage(fileName, 0)
+                    EasyFilterClient.preparePackage(fileName, 0)
                 );
                 System.out.println("request sent");
                 // receive file from server
@@ -67,10 +69,6 @@ public class EasyFilterClient
 //            System.out.print("request type recvd:");
 //            System.out.println(pkg.getRequestType());
 //        }
-
-//        // send close request to server
-            btc.sendRequest(EasyFilterClient.preparePackage("Exit", 1337));
-//        System.out.println("connection closed");
 
 //         send the package to a server
 //         todo remove test:

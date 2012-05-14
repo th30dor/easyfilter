@@ -8,6 +8,7 @@
  */
 package EasyFilterServer;
 
+import EasyFilterServer.Communication.CommunicationInterface;
 import common.EasyPropertiesReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,8 +65,10 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
             // creates a new thread for each new connection
             CommunicationInterface localCi = super.instanceFactory();
             if (localCi.connectionAccepted()) {
+                // receive the package from the client
+                common.Package pkg = (common.Package)localCi.receiveFile();
                 System.out.println("ThreadReadPoolWrite: before client thread");
-                this.getClientThreadPool().submit(new ClientThread(localCi));
+                this.getClientThreadPool().submit(new ClientThread(localCi, pkg));
             }
         }
     }

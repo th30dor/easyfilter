@@ -8,6 +8,8 @@
  */
 package EasyFilterServer;
 
+import EasyFilterServer.Communication.CommunicationInterface;
+import EasyFilterServer.Communication.ClientBlockingTcpConnection;
 import common.EasyPropertiesReader;
 
 /**
@@ -43,11 +45,13 @@ public class OneThreadPerSocket
         this.getCi().openConnection();
         System.out.println("opened connection");
         while(true) {
-            // creates a new thread for each new connection
+            // creates a new communication instance for each new connection
             CommunicationInterface localCi = instanceFactory();
             if (localCi.connectionAccepted()) {
-                System.out.println("before client thread");
-                ClientThread wt = new ClientThread(localCi);
+                // receive the package from the client
+                common.Package pkg = (common.Package)localCi.receiveFile();
+                System.out.println("received file; before client thread");
+                ClientThread wt = new ClientThread(localCi, pkg);
                 wt.start();
             }
         }
@@ -66,6 +70,7 @@ public class OneThreadPerSocket
          String requestType = epr.readProperty("Settings", "RequestType");
 
          // set the connection type
+         // todo variaza
          if(requestType.equals("tcp")) {
              return new ClientBlockingTcpConnection();
          } else {

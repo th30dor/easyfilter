@@ -8,6 +8,7 @@
  */
 package EasyFilterServer;
 
+import EasyFilterServer.Communication.ClientBlockingTcpConnection;
 import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -30,15 +31,21 @@ public class EasyFilterServer
         EasyFilterServer.readServerIPs();
 
         // accept connections from the other servers
-//        InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
-//        isc.start();
+        InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
+        isc.start();
 
         // accept connections from the clients on a separate thread
+        
 //        OneThreadPerSocket otps = new OneThreadPerSocket(new ClientBlockingTcpConnection());
 //        otps.acceptConnections();
 //        
+        //todo de mutat si aici pkg
         ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(new ClientBlockingTcpConnection());
         trpw.acceptConnections();
+
+        
+//        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(new ClientNonBlockingTcpConnection());
+//        trpw.acceptConnections();
 
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);

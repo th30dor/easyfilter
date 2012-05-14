@@ -8,6 +8,8 @@
  */
 package EasyFilterServer;
 
+import EasyFilterServer.Communication.CommunicationInterface;
+
 /**
  * Handles the communication and processing between servers
  */

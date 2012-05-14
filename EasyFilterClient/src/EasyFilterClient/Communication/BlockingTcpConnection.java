@@ -6,7 +6,7 @@
  * @author Marin Alexandru, 343 C1
  *
  */
-package EasyFilterClient;
+package EasyFilterClient.Communication;
 
 import common.EasyPropertiesReader;
 import java.io.IOException;

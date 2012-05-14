@@ -8,6 +8,7 @@
  */
 package EasyFilterServer;
 
+import EasyFilterServer.Communication.ClientBlockingTcpConnection;
 import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.net.ServerSocket;

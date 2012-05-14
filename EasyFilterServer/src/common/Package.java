@@ -50,7 +50,6 @@ public class Package implements Serializable
      * 0    - get new modified image
      * 1    - get an image already saved on the server
      * -1   - error code ( file not found )
-     * 1337 - announces the server to close the connection
      */
     private int requestType;
 
@@ -67,7 +66,6 @@ public class Package implements Serializable
      *                     0    - get new modified image
      *                     1    - get an image already saved on the server
      *                     -1   - error code ( file not found )
-     *                     1337 - announces the server to close the connection
      */
     public Package (String magicNumber, int width, int height,
         int maxGrayValue, int image[][], String fileName, int requestType
@@ -90,7 +88,6 @@ public class Package implements Serializable
      *                        0    - get new modified image
      *                        1    - get an image already saved on the server
      *                        -1   - error code ( file not found )
-     *                        1337 - announces the server to close the connection
      */
     public Package (EasyImageReader eir, String fileName, int requestType)
     {
@@ -111,7 +108,6 @@ public class Package implements Serializable
      *                    0    - get new modified image
      *                    1    - get an image already saved on the server
      *                    -1   - error code ( file not found )
-     *                    1337 - announces the server to close the connection
      */
     public Package (String fileName, int requestType)
     {
