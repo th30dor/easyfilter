@@ -9,6 +9,7 @@
 package EasyFilterServer;
 
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
+import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -19,11 +20,29 @@ import java.util.Vector;
  */
 public class EasyFilterServer
 {
-    // vector of server IPs
+    /**
+     * vector of server IPs
+     */
     private static Vector<String> serverIPs;
-    // the port on which all servers communicate with eachother
+
+    /**
+     * the port on which all servers communicate with each other
+     */
     private static int serversListenPort;
 
+    /**
+     * The request type read from the config file
+     * Used in instanceFactory()
+     */
+    private static String requestType;
+
+    /**
+     * Main server function
+     *
+     * @param args
+     * @throws UnknownHostException
+     * @throws IOException
+     */
     public static void main(String[] args)
         throws UnknownHostException, IOException
     {
@@ -35,17 +54,24 @@ public class EasyFilterServer
         isc.start();
 
         // accept connections from the clients on a separate thread
-        
-//        OneThreadPerSocket otps = new OneThreadPerSocket(new ClientBlockingTcpConnection());
+
+//        OneThreadPerSocket otps = new OneThreadPerSocket(
+//            new ClientBlockingTcpConnection(),
+//            EasyFilterServer.getRequestType()
+//        );
 //        otps.acceptConnections();
-//        
+//
         //todo de mutat si aici pkg
-        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(new ClientBlockingTcpConnection());
+        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
+            new ClientBlockingTcpConnection(),
+            EasyFilterServer.getRequestType()
+        );
         trpw.acceptConnections();
 
-        
-//        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(new ClientNonBlockingTcpConnection());
-//        trpw.acceptConnections();
+//        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
+//            new ClientNonBlockingTcpConnection(),
+//            EasyFilterServer.getRequestType()
+//        );
 
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);
@@ -63,8 +89,10 @@ public class EasyFilterServer
         // init vector
         EasyFilterServer.setServerIPs(new Vector<String>());
 
-        // Read config settings for servers
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
+        // read the request type from the configuration settings
+        EasyFilterServer.setRequestType(props.readProperty("Settings", "RequestType"));
+        // read config settings for servers
         EasyFilterServer.setServersListenPort(Integer.parseInt(props.readProperty("Servers", "port")));
         servers_number = Integer.parseInt(props.readProperty("Servers", "servers_number"));
 
@@ -91,5 +119,13 @@ public class EasyFilterServer
 
     private static void setServersListenPort(int serversListenPort) {
         EasyFilterServer.serversListenPort = serversListenPort;
+    }
+
+    public static String getRequestType() {
+        return requestType;
+    }
+
+    private static void setRequestType(String requestType) {
+        EasyFilterServer.requestType = requestType;
     }
 }

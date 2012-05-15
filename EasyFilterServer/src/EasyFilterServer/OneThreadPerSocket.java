@@ -34,12 +34,10 @@ public class OneThreadPerSocket
      *
      * @param ci instance of a class that implements CommunicationInterface
      */
-    public OneThreadPerSocket(CommunicationInterface ci)
+    public OneThreadPerSocket(CommunicationInterface ci, String requestType)
     {
         this.setCi(ci);
-        // read the request type from the configuration settings
-        EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
-        this.setRequestType(epr.readProperty("Settings", "RequestType"));
+        this.setRequestType(requestType);
     }
 
     /**
