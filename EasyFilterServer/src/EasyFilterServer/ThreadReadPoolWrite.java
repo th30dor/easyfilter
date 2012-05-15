@@ -34,9 +34,9 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
      * @param ci Instance of a class that implements CommunicationInterface
      *           Will be set in the constructor
      */
-    public ThreadReadPoolWrite(CommunicationInterface ci, String requestType)
+    public ThreadReadPoolWrite(CommunicationInterface ci, String protocol)
     {
-        super(ci, requestType);
+        super(ci, protocol);
 
         // get number of threads from the config file
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");

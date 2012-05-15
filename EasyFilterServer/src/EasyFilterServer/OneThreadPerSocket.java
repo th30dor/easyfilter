@@ -10,7 +10,7 @@ package EasyFilterServer;
 
 import EasyFilterServer.Communication.CommunicationInterface;
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
-import common.EasyPropertiesReader;
+//import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 
 /**
  * Handles the one thread per socket request type
@@ -24,10 +24,10 @@ public class OneThreadPerSocket
     private CommunicationInterface ci;
 
     /**
-     * The request type read from the config file
+     * The protocol read from the config file
      * Used in instanceFactory()
      */
-    private String requestType;
+    private String protocol;
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ public class OneThreadPerSocket
     public OneThreadPerSocket(CommunicationInterface ci, String requestType)
     {
         this.setCi(ci);
-        this.setRequestType(requestType);
+        this.setProtocol(requestType);
     }
 
     /**
@@ -72,13 +72,15 @@ public class OneThreadPerSocket
      */
     CommunicationInterface instanceFactory()
     {
-         // todo variaza
-         if (this.getRequestType().equals("tcp")) {
-             return new ClientBlockingTcpConnection();
-         } else {
-             //TODO alte cazuri
-             return new ClientBlockingTcpConnection();
-         }
+        if (this.getProtocol().equals("tcp")) {
+            return new ClientBlockingTcpConnection();
+        } else if (this.getProtocol().equals("nio")) {
+//            return new ClientNonBlockingTcpConnection();
+        } else {
+            //TODO alte cazuri
+        }
+
+        return null;
     }
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
@@ -91,11 +93,11 @@ public class OneThreadPerSocket
         this.ci = ci;
     }
 
-    public String getRequestType() {
-        return requestType;
+    public String getProtocol() {
+        return protocol;
     }
 
-    private void setRequestType(String requestType) {
-        this.requestType = requestType;
+    private void setProtocol(String requestType) {
+        this.protocol = requestType;
     }
 }

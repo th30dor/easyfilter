@@ -31,10 +31,10 @@ public class EasyFilterServer
     private static int serversListenPort;
 
     /**
-     * The request type read from the config file
+     * The protocol read from the config file
      * Used in instanceFactory()
      */
-    private static String requestType;
+    private static String protocol;
 
     /**
      * Main server function
@@ -46,8 +46,8 @@ public class EasyFilterServer
     public static void main(String[] args)
         throws UnknownHostException, IOException
     {
-        // Read the other servers` IPs from config.ini
-        EasyFilterServer.readServerIPs();
+        // Read the other servers` IPs and request type from config.ini
+        EasyFilterServer.readConfigInfo();
 
         // accept connections from the other servers
         InterServerCommunicator isc = new InterServerCommunicator(new ServerBlockingTcpConnection());
@@ -57,20 +57,20 @@ public class EasyFilterServer
 
 //        OneThreadPerSocket otps = new OneThreadPerSocket(
 //            new ClientBlockingTcpConnection(),
-//            EasyFilterServer.getRequestType()
+//            EasyFilterServer.getProtocol()
 //        );
 //        otps.acceptConnections();
 //
         //todo de mutat si aici pkg
         ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
             new ClientBlockingTcpConnection(),
-            EasyFilterServer.getRequestType()
+            EasyFilterServer.getProtocol()
         );
         trpw.acceptConnections();
 
 //        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
 //            new ClientNonBlockingTcpConnection(),
-//            EasyFilterServer.getRequestType()
+//            EasyFilterServer.getProtocol()
 //        );
 
         // asteptam sa primim un fisier
@@ -81,8 +81,9 @@ public class EasyFilterServer
     /**
      * Reads the server IPs from the config file and remembers them locally
      * The local server is not included in the config file
+     * Also reads the request type
      */
-    public static void readServerIPs ()
+    public static void readConfigInfo ()
     {
         int servers_number;
         String current_server_name;
@@ -91,7 +92,7 @@ public class EasyFilterServer
 
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
         // read the request type from the configuration settings
-        EasyFilterServer.setRequestType(props.readProperty("Settings", "RequestType"));
+        EasyFilterServer.setProtocol(props.readProperty("Settings", "Protocol"));
         // read config settings for servers
         EasyFilterServer.setServersListenPort(Integer.parseInt(props.readProperty("Servers", "port")));
         servers_number = Integer.parseInt(props.readProperty("Servers", "servers_number"));
@@ -121,11 +122,11 @@ public class EasyFilterServer
         EasyFilterServer.serversListenPort = serversListenPort;
     }
 
-    public static String getRequestType() {
-        return requestType;
+    public static String getProtocol() {
+        return protocol;
     }
 
-    private static void setRequestType(String requestType) {
-        EasyFilterServer.requestType = requestType;
+    private static void setProtocol(String requestType) {
+        EasyFilterServer.protocol = requestType;
     }
 }
