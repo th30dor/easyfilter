@@ -21,7 +21,13 @@ public class OneThreadPerSocket
      * Instance of a class that implements CommunicationInterface
      * Will be set in the constructor
      */
-    CommunicationInterface ci;
+    private CommunicationInterface ci;
+
+    /**
+     * The request type read from the config file
+     * Used in instanceFactory()
+     */
+    private String requestType;
 
     /**
      * Constructor
@@ -31,6 +37,9 @@ public class OneThreadPerSocket
     public OneThreadPerSocket(CommunicationInterface ci)
     {
         this.setCi(ci);
+        // read the request type from the configuration settings
+        EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
+        this.setRequestType(epr.readProperty("Settings", "RequestType"));
     }
 
     /**
@@ -65,13 +74,8 @@ public class OneThreadPerSocket
      */
     CommunicationInterface instanceFactory()
     {
-         // read the request type from the configuration settings
-         EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
-         String requestType = epr.readProperty("Settings", "RequestType");
-
-         // set the connection type
          // todo variaza
-         if(requestType.equals("tcp")) {
+         if (this.getRequestType().equals("tcp")) {
              return new ClientBlockingTcpConnection();
          } else {
              //TODO alte cazuri
@@ -87,5 +91,13 @@ public class OneThreadPerSocket
 
     private void setCi(CommunicationInterface ci) {
         this.ci = ci;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    private void setRequestType(String requestType) {
+        this.requestType = requestType;
     }
 }
