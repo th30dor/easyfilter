@@ -1,8 +1,12 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Proiect PDSD - EasyFilter
+ *
+ * @author Gherghescu Teo, 343 C1
+ * @author Stoean Bogdan, 343 C1
+ * @author Marin Alexandru, 343 C1
+ *
  */
-package EasyFilterClientUI;
+package EasyFilterClient.UI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,11 +16,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
- *
- * @author BOGDAN
+ * Handles the main panel that will be used in the user interface
  */
-public class MainPanel extends JPanel{
-    
+public class MainPanel extends JPanel
+{
     private JTextField filename;
     private JTextField directory;
     private JButton upload;
@@ -25,12 +28,14 @@ public class MainPanel extends JPanel{
     private JButton download;
     private JPanel northPanel;
     private JPanel southPanel;
-    
-    
+
+    /**
+     * Constructor
+     */
     public MainPanel(){
         setLayout(new GridLayout(2, 1));
         northPanel = new JPanel();
-        
+
         upload = new JButton("Upload");
         filename = new JTextField("",20);
         directory = new JTextField();
@@ -53,15 +58,17 @@ public class MainPanel extends JPanel{
         northPanel.add(upload);
         northPanel.add(filename);
         add(northPanel);
-        
+
         southPanel = new JPanel(new GridBagLayout());
         downloadFile = new JTextField("",20);
         download = new JButton("Download");
         southPanel.add(download);
         southPanel.add(downloadFile);
         add(southPanel);
-        
+
     }
+
+    // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
 
     public JTextField getDirectory() {
         return directory;
@@ -126,5 +133,4 @@ public class MainPanel extends JPanel{
     public void setUpload(JButton upload) {
         this.upload = upload;
     }
-    
 }
