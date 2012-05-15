@@ -10,7 +10,7 @@ package EasyFilterServer;
 
 import EasyFilterServer.Communication.CommunicationInterface;
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
-//import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
+import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 
 /**
  * Handles the one thread per socket request type
@@ -24,20 +24,13 @@ public class OneThreadPerSocket
     private CommunicationInterface ci;
 
     /**
-     * The protocol read from the config file
-     * Used in instanceFactory()
-     */
-    private String protocol;
-
-    /**
      * Constructor
      *
      * @param ci instance of a class that implements CommunicationInterface
      */
-    public OneThreadPerSocket(CommunicationInterface ci, String requestType)
+    public OneThreadPerSocket(CommunicationInterface ci)
     {
         this.setCi(ci);
-        this.setProtocol(requestType);
     }
 
     /**
@@ -53,7 +46,7 @@ public class OneThreadPerSocket
         System.out.println("opened connection");
         while(true) {
             // creates a new communication instance for each new connection
-            CommunicationInterface localCi = instanceFactory();
+            CommunicationInterface localCi = EasyFilterServer.instanceFactory();
             if (localCi.connectionAccepted()) {
                 // receive the package from the client
                 common.Package pkg = (common.Package)localCi.receiveFile();
@@ -64,25 +57,6 @@ public class OneThreadPerSocket
         }
     }
 
-    /**
-     * Sets the connection type based on the configuration settings in
-     * "config/config.ini"
-     *
-     * @return new CommunicationInterface instance
-     */
-    CommunicationInterface instanceFactory()
-    {
-        if (this.getProtocol().equals("tcp")) {
-            return new ClientBlockingTcpConnection();
-        } else if (this.getProtocol().equals("nio")) {
-//            return new ClientNonBlockingTcpConnection();
-        } else {
-            //TODO alte cazuri
-        }
-
-        return null;
-    }
-
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
 
     public CommunicationInterface getCi() {
@@ -91,13 +65,5 @@ public class OneThreadPerSocket
 
     private void setCi(CommunicationInterface ci) {
         this.ci = ci;
-    }
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    private void setProtocol(String requestType) {
-        this.protocol = requestType;
     }
 }

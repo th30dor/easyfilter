@@ -9,7 +9,8 @@
 package EasyFilterServer;
 
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
-import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
+//import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
+import EasyFilterServer.Communication.CommunicationInterface;
 import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -56,26 +57,43 @@ public class EasyFilterServer
         // accept connections from the clients on a separate thread
 
 //        OneThreadPerSocket otps = new OneThreadPerSocket(
-//            new ClientBlockingTcpConnection(),
-//            EasyFilterServer.getProtocol()
+//            new ClientBlockingTcpConnection()
 //        );
 //        otps.acceptConnections();
 //
         //todo de mutat si aici pkg
-        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
-            new ClientBlockingTcpConnection(),
-            EasyFilterServer.getProtocol()
-        );
-        trpw.acceptConnections();
-
 //        ThreadReadPoolWrite trpw = new ThreadReadPoolWrite(
-//            new ClientNonBlockingTcpConnection(),
-//            EasyFilterServer.getProtocol()
+//            new ClientBlockingTcpConnection()
 //        );
+//        trpw.acceptConnections();
+
+        // switch-ul tcp/nio se face in config.ini
+        OneThreadPerSocket otps = new OneThreadPerSocket(
+            EasyFilterServer.instanceFactory()
+        );
 
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);
 //        trf.listen();
+    }
+
+    /**
+     * Sets the connection type based on the configuration settings in
+     * "config/config.ini"
+     *
+     * @return new CommunicationInterface instance
+     */
+    public static CommunicationInterface instanceFactory()
+    {
+        if (EasyFilterServer.getProtocol().equals("tcp")) {
+            return new ClientBlockingTcpConnection();
+        } else if (EasyFilterServer.getProtocol().equals("nio")) {
+//            return new ClientNonBlockingTcpConnection();
+        } else {
+            //TODO alte cazuri
+        }
+
+        return null;
     }
 
     /**

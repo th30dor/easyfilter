@@ -34,9 +34,9 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
      * @param ci Instance of a class that implements CommunicationInterface
      *           Will be set in the constructor
      */
-    public ThreadReadPoolWrite(CommunicationInterface ci, String protocol)
+    public ThreadReadPoolWrite(CommunicationInterface ci)
     {
-        super(ci, protocol);
+        super(ci);
 
         // get number of threads from the config file
         EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
@@ -64,7 +64,7 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
 
         while(true) {
             // creates a new thread for each new connection
-            CommunicationInterface localCi = super.instanceFactory();
+            CommunicationInterface localCi = EasyFilterServer.instanceFactory();
             if (localCi.connectionAccepted()) {
                 // receive the package from the client
                 common.Package pkg = (common.Package)localCi.receiveFile();
