@@ -8,6 +8,8 @@
  */
 package EasyFilterClient.UI;
 
+import EasyFilterClient.Communication.*;
+import EasyFilterClient.EasyFilterClient;
 import javax.swing.JFrame;
 
 /**
@@ -24,7 +26,8 @@ public class EasyFilterClientUI extends JFrame{
     public EasyFilterClientUI ()
     {
         //mainPanel = new MainPanel();
-        mainPanel = new EasyFilterClientInter(null);
+        // todo selectare tip conexiune
+        mainPanel = new EasyFilterClientInter(new BlockingTcpConnection());
         setSize(400, 400);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(mainPanel);

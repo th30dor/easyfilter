@@ -183,13 +183,15 @@ public class EasyFilterClientInter extends JPanel {
     }
     //file 0
     private void createUploadRequest(){
-        
+        this.getCi().openConnection();
+
         common.Package pkg;
-        
-        ci.sendRequest(EasyFilterClient.preparePackage(
-            this.getFilepath().getText(), 
+        String filePathUI =  this.getFilepath().getText();
+        pkg = EasyFilterClient.preparePackage(
+            filePathUI, 
             0
-        ));
+        );
+        ci.sendRequest(pkg);
         
         System.out.println("request sent");
         // receive file from server
@@ -203,8 +205,9 @@ public class EasyFilterClientInter extends JPanel {
         JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
         int rVal = fileChooser.showOpenDialog(this);
         if (rVal == JFileChooser.APPROVE_OPTION) {
-        this.getFilepath().setText(System.getProperty("user.dir")+"\\"+fileChooser.getSelectedFile().getName());
-        //this.getFilepath().setText(fileChooser.getCurrentDirectory().toString());
+        this.getFilepath().setText(fileChooser.getCurrentDirectory().toString()+"/"+fileChooser.getSelectedFile().getName());
+//            this.getFilepath().setText(fileChooser.getCurrentDirectory().toString());
+//            System.out.println("chooseer: "+fileChooser.getCurrentDirectory().toString());
         }
         if (rVal == JFileChooser.CANCEL_OPTION) {
         filename.setText("You pressed cancel");
@@ -217,7 +220,6 @@ public class EasyFilterClientInter extends JPanel {
      * creates the Dwl interface
      */
     private void createDwl(){
-
         this.getpDwl().removeAll();
         
         this.setFilename(new JTextField("",30));
@@ -238,6 +240,7 @@ public class EasyFilterClientInter extends JPanel {
     
     private void createDownloadRequest(){
         common.Package pkg;
+        this.getCi().openConnection();
         
         ci.sendRequest(EasyFilterClient.preparePackage(
             this.getFilename().getText(), 
