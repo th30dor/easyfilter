@@ -6,6 +6,7 @@ package EasyFilterClient.UI;
 
 import EasyFilterClient.Communication.ClientCommunicationInterface;
 import EasyFilterClient.EasyFilterClient;
+import common.EasyImageWriter;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
@@ -252,6 +253,9 @@ public class EasyFilterClientInter extends JPanel {
         pkg = ci.receiveRequest();
         System.out.println("request received");        
         
+        // write the image locally
+        EasyImageWriter eiw = new EasyImageWriter(pkg);
+        eiw.write();
     }
     
     private void initButtons() {

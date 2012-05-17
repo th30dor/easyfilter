@@ -93,7 +93,7 @@ public final class EasyImageWriter
         try {
             int i,j;
             // Create file
-            FileWriter fstream = new FileWriter(this.getFileName());
+            FileWriter fstream = new FileWriter("images/" + this.getFileName());
             BufferedWriter out = new BufferedWriter(fstream);
 
             // Write image header info
