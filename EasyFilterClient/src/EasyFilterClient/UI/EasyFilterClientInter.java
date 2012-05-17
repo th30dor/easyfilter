@@ -253,9 +253,14 @@ public class EasyFilterClientInter extends JPanel {
         pkg = ci.receiveRequest();
         System.out.println("request received");        
         
-        // write the image locally
-        EasyImageWriter eiw = new EasyImageWriter(pkg);
-        eiw.write();
+        // check if the package is an actual image
+        if (pkg.getRequestType() == -1) {
+            this.getFilename().setText("File Not Found");
+        } else {
+            // write the image locally
+            EasyImageWriter eiw = new EasyImageWriter(pkg);
+            eiw.write();
+        }
     }
     
     private void initButtons() {

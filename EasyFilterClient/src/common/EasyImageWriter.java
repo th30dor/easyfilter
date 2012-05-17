@@ -70,7 +70,7 @@ public final class EasyImageWriter
     /**
      * Constructor
      *
-     * @param p        package to be written              
+     * @param pkg      package to be written              
      * @param fileName file name
      */
     public EasyImageWriter (Package pkg)
