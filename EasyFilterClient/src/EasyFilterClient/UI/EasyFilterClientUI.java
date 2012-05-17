@@ -15,14 +15,16 @@ import javax.swing.JFrame;
  */
 public class EasyFilterClientUI extends JFrame{
 
-    private MainPanel mainPanel;
+    //private MainPanel mainPanel;
+    private EasyFilterClientInter mainPanel;
 
     /**
      * Constructor
      */
     public EasyFilterClientUI ()
     {
-        mainPanel = new MainPanel();
+        //mainPanel = new MainPanel();
+        mainPanel = new EasyFilterClientInter();
         setSize(400, 400);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(mainPanel);
