@@ -10,7 +10,7 @@ package EasyFilterServer;
 
 import EasyFilterServer.Communication.CommunicationInterface;
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
-import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
+//import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 
 /**
  * Handles the one thread per socket request type

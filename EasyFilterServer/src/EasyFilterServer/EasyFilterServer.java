@@ -71,7 +71,7 @@ public class EasyFilterServer
         OneThreadPerSocket otps = new OneThreadPerSocket(
             EasyFilterServer.instanceFactory()
         );
-
+        otps.acceptConnections();
         // asteptam sa primim un fisier
 //        TestReceiveFile trf = new TestReceiveFile(5001);
 //        trf.listen();
