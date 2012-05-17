@@ -24,7 +24,7 @@ public class EasyFilterClientUI extends JFrame{
     public EasyFilterClientUI ()
     {
         //mainPanel = new MainPanel();
-        mainPanel = new EasyFilterClientInter();
+        mainPanel = new EasyFilterClientInter(null);
         setSize(400, 400);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(mainPanel);

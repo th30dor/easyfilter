@@ -4,6 +4,8 @@
  */
 package EasyFilterClient.UI;
 
+import EasyFilterClient.Communication.ClientCommunicationInterface;
+import EasyFilterClient.EasyFilterClient;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
@@ -17,6 +19,8 @@ import javax.swing.*;
  * @author BOGDAN
  */
 public class EasyFilterClientInter extends JPanel {
+    
+    private ClientCommunicationInterface ci;
     
     /**
      * Radio buttons for choosing type of request
@@ -57,7 +61,9 @@ public class EasyFilterClientInter extends JPanel {
     private JTextField  filename;
     private JTextField filepath;
     
-    public EasyFilterClientInter(){
+    public EasyFilterClientInter(ClientCommunicationInterface ci){
+        
+        this.setCi(ci);
         
         this.setLayout(new GridLayout(2, 4));
         
@@ -162,11 +168,34 @@ public class EasyFilterClientInter extends JPanel {
         });
            
         
+        this.getGoUpload().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createUploadRequest();
+            }
+        });
         
         this.getpUpl().add(this.getFilepath());
         this.getpUpl().add(this.getChoose());
         this.getpUpl().add(this.getGoUpload());
         
+    }
+    //file 0
+    private void createUploadRequest(){
+        
+        common.Package pkg;
+        
+        ci.sendRequest(EasyFilterClient.preparePackage(
+            this.getFilepath().getText(), 
+            0
+        ));
+        
+        System.out.println("request sent");
+        // receive file from server
+        pkg = ci.receiveRequest();
+        System.out.println("request received");
+
     }
     
     private void chooseFile(){
@@ -196,9 +225,31 @@ public class EasyFilterClientInter extends JPanel {
         
         this.getpDwl().add(this.getFilename());
         this.getpDwl().add(this.getGoDownload());
+        
+        this.getGoDownload().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createDownloadRequest();
+            }
+        });
+        
     }
     
-    
+    private void createDownloadRequest(){
+        common.Package pkg;
+        
+        ci.sendRequest(EasyFilterClient.preparePackage(
+            this.getFilename().getText(), 
+            1
+        ));
+        
+        System.out.println("request sent");
+        // receive file from server
+        pkg = ci.receiveRequest();
+        System.out.println("request received");        
+        
+    }
     
     private void initButtons() {
         //this.remove();
@@ -284,6 +335,14 @@ public class EasyFilterClientInter extends JPanel {
 
     public void setChoose(JButton choose) {
         this.choose = choose;
+    }
+
+    public ClientCommunicationInterface getCi() {
+        return ci;
+    }
+
+    public void setCi(ClientCommunicationInterface ci) {
+        this.ci = ci;
     }
     
     
