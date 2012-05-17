@@ -240,6 +240,17 @@ class ClientThread extends Thread
                 pkg.getImage()[i][k] = partialImage[i - servers_number * chunkSize][k];
             }
         }
+        
+        // send the image to all the other servers
+        for (i = 0; i < servers_number; i++) {
+            try {
+                os = serverList.get(i).getOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(os);
+                oos.writeObject(pkg);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     } // end processImageOnServers
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~

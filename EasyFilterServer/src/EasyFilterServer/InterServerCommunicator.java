@@ -9,6 +9,7 @@
 package EasyFilterServer;
 
 import EasyFilterServer.Communication.CommunicationInterface;
+import common.EasyImageWriter;
 
 /**
  * Handles the communication and processing between servers
@@ -51,6 +52,12 @@ public class InterServerCommunicator extends Thread
             // send the processed chunk back
             ci.sendFile(pkg);
 
+            // receive the full file from 
+            pkg = (common.Package)this.getCi().receiveFile();
+            // Writes the modified image with the same name
+            EasyImageWriter eiw = new EasyImageWriter(pkg);
+            eiw.write();
+            
             // close the connection to the server that sent the chunk
             ci.closeConnection();
         }
