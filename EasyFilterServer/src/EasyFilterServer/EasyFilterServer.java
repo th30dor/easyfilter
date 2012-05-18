@@ -9,7 +9,7 @@
 package EasyFilterServer;
 
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
-//import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
+import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 import EasyFilterServer.Communication.CommunicationInterface;
 import common.EasyPropertiesReader;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class EasyFilterServer
         if (EasyFilterServer.getProtocol().equals("tcp")) {
             return new ClientBlockingTcpConnection();
         } else if (EasyFilterServer.getProtocol().equals("nio")) {
-//            return new ClientNonBlockingTcpConnection();
+            return new ClientNonBlockingTcpConnection();
         } else {
             //TODO alte cazuri
         }
