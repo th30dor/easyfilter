@@ -8,8 +8,7 @@
  */
 package EasyFilterClient;
 
-import EasyFilterClient.Communication.BlockingTcpConnection;
-import common.EasyPropertiesReader;
+import EasyFilterClient.Communication.BlockingUdpConnection;
 import common.EasyImageReader;
 import common.EasyImageWriter;
 import common.Package;
@@ -28,7 +27,7 @@ public class EasyFilterClient
         throws UnknownHostException, IOException
     {
         // todo: de luat din interfata grafica
-        String fileName = "images/client_garfield.pgm";
+        String fileName = "images/garfield1.pgm";
         String configFilePath = "config/config.ini";
         common.Package pkg = null;
 
@@ -38,7 +37,8 @@ public class EasyFilterClient
 //        int serverPort = Integer.parseInt(props.readProperty("Address", "port"));
 
         // simulate graphic interface for blocking TCP
-        BlockingTcpConnection btc = new BlockingTcpConnection();
+//        BlockingTcpConnection btc = new BlockingTcpConnection();
+        BlockingUdpConnection btc = new BlockingUdpConnection();
 
         // test 3x send-receive new files + close
             System.out.println("conn open");

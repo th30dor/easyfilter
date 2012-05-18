@@ -9,6 +9,7 @@
 package EasyFilterServer;
 
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
+import EasyFilterServer.Communication.ClientBlockingUdpConnection;
 import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 import EasyFilterServer.Communication.CommunicationInterface;
 import common.EasyPropertiesReader;
@@ -89,8 +90,8 @@ public class EasyFilterServer
             return new ClientBlockingTcpConnection();
         } else if (EasyFilterServer.getProtocol().equals("nio")) {
             return new ClientNonBlockingTcpConnection();
-        } else {
-            //TODO alte cazuri
+        } else if (EasyFilterServer.getProtocol().equals("udp")){
+            return new ClientBlockingUdpConnection();
         }
 
         return null;

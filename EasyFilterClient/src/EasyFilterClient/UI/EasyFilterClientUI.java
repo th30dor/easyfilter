@@ -27,7 +27,8 @@ public class EasyFilterClientUI extends JFrame{
     {
         //mainPanel = new MainPanel();
         // todo selectare tip conexiune
-        mainPanel = new EasyFilterClientInter(new BlockingTcpConnection());
+//        mainPanel = new EasyFilterClientInter(new BlockingTcpConnection());
+        mainPanel = new EasyFilterClientInter(new BlockingUdpConnection());
         setSize(400, 400);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(mainPanel);
