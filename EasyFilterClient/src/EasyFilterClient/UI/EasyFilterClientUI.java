@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 /**
  * Main user interface for EasyClient
  */
-public class EasyFilterClientUI extends JFrame{
+public class EasyFilterClientUI extends JFrame {
 
     //private MainPanel mainPanel;
     private EasyFilterClientInter mainPanel;
@@ -23,8 +23,7 @@ public class EasyFilterClientUI extends JFrame{
     /**
      * Constructor
      */
-    public EasyFilterClientUI ()
-    {
+    public EasyFilterClientUI() {
         //mainPanel = new MainPanel();
         // todo selectare tip conexiune
 //        mainPanel = new EasyFilterClientInter(new BlockingTcpConnection());
@@ -41,8 +40,7 @@ public class EasyFilterClientUI extends JFrame{
      *
      * @param args arguments to be run with
      */
-    public static void main(String args[])
-    {
-      EasyFilterClientUI ui = new EasyFilterClientUI();
+    public static void main(String args[]) {
+        EasyFilterClientUI ui = new EasyFilterClientUI();
     }
 }

@@ -197,6 +197,32 @@ public class ClientBlockingUdpConnection implements CommunicationInterface {
                 chunkPosition = buf[20];
                 numberOfChunks = buf[21];
 
+                // download
+                if (chunkPosition == -1 && numberOfChunks == -1) {
+
+                    image = new byte[packet.getLength() - 22];
+
+                    // get the actual package
+                    for (i = 0; i < packet.getLength() - 22; i++) {
+                        image[i] = buf[i + 22];
+                    }
+
+                    baos = new ByteArrayInputStream(image);
+                    ois = new ObjectInputStream(baos);
+
+                    try {
+                        pkg = (common.Package) ois.readObject();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ClientBlockingUdpConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    // set the current client address
+                    this.setCurrentClientIP(clientIP);
+                    this.setCurrentClientPort(Integer.parseInt(clientPort.trim()));
+
+                    return pkg;
+                }
+
                 // add image chunks to hash table
                 if (images.containsKey(key)) {
                     chunk = images.get(key);

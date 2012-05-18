@@ -96,6 +96,47 @@ public class BlockingUdpConnection implements ClientCommunicationInterface {
             }
         }
 
+        // download
+        if (pkg.getRequestType() == 1) {
+            buf = ByteBuffer.allocate(22 + packageBytes.length);
+            b = 0;
+            // add server IP
+            for (j = 0; j < this.getServerIP().length(); j++) {
+                buf.put((byte) this.getServerIP().charAt(j));
+            }
+            for (j = 0; j < 15 - this.getServerIP().length(); j++) {
+                buf.put((byte) 0);
+            }
+            // add server port
+
+            port = this.getClientPort() + "";
+            for (j = 0; j < port.length(); j++) {
+                buf.put((byte) port.charAt(j));
+            }
+            for (j = 0; j < 5 - port.length(); j++) {
+                buf.put((byte) 0);
+            }
+
+            buf.put((byte) -1);
+            buf.put((byte) -1);
+
+            // add the package to the stream
+            buf.put(ByteBuffer.wrap(packageBytes));
+            buf.flip();
+            // create the actual packet
+            DatagramPacket packet = new DatagramPacket(buf.array(), buf.array().length);
+            try {
+                // set the address for the packet
+                packet.setAddress(InetAddress.getByName(this.getServerIP()));
+                packet.setPort(this.getServerPort());
+                // finally send the packet
+                this.getUdpSocket().send(packet);
+            } catch (Exception ex) {
+                Logger.getLogger(BlockingUdpConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
+
         // the buffer for the received packet
         // bytes 0-14  contain the client IP
         // bytes 15-19          - the client port
