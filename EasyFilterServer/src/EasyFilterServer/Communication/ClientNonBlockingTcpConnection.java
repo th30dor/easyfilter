@@ -148,17 +148,19 @@ public class ClientNonBlockingTcpConnection implements CommunicationInterface {
             // wait for connection to be accepted
             boolean isDone = false;
             while (! isDone) {
-                this.getSelector().select(100);
+                this.getSelector().select(10000);
                 // process keys with request
                 Iterator<SelectionKey> selectedKeys = this.getSelector().selectedKeys().iterator();
 
-                while (selectedKeys.hasNext()) {
-                    SelectionKey key = selectedKeys.next();
-//                    selectedKeys.remove();
+                synchronized(selectedKeys) {
+                    while (selectedKeys.hasNext()) {
+                        SelectionKey key = selectedKeys.next();
+//                        selectedKeys.remove();
 
-                    if (key.isWritable()) {
-                        this.doWrite(key, obj);
-                        isDone = true;
+                        if (key.isWritable()) {
+                            this.doWrite(key, obj);
+                            isDone = true;
+                        }
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class ClientNonBlockingTcpConnection implements CommunicationInterface {
 
                 while (selectedKeys.hasNext()) {
                     SelectionKey key = selectedKeys.next();
-                    selectedKeys.remove();
+//                    selectedKeys.remove();
 
                     if (key.isReadable()) {
                         return this.doRead(key);

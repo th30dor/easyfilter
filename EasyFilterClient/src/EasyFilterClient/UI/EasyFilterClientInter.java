@@ -198,7 +198,10 @@ public class EasyFilterClientInter extends JPanel {
         // receive file from server
         pkg = ci.receiveRequest();
         System.out.println("request received");
-
+        
+        // write the image locally
+        EasyImageWriter eiw = new EasyImageWriter(pkg);
+        eiw.write();
     }
     
     private void chooseFile(){
