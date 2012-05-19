@@ -8,7 +8,7 @@
  */
 package EasyFilterClient.Communication;
 
-import common.EasyPropertiesReader;
+import EasyFilterClient.UI.EasyFilterClientUI;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,9 +42,8 @@ public class BlockingUdpConnection implements ClientCommunicationInterface {
      * Constructor Remembers the server address
      */
     public BlockingUdpConnection() {
-        EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
-        this.setServerIP(epr.readProperty("Address", "IP"));
-        this.setServerPort(Integer.parseInt(epr.readProperty("Address", "port")));
+        this.setServerIP(EasyFilterClientUI.getClientIP());
+        this.setServerPort(EasyFilterClientUI.getClientPort());
     }
 
     /**

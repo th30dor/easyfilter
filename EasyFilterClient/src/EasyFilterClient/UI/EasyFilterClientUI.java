@@ -10,24 +10,43 @@ package EasyFilterClient.UI;
 
 import EasyFilterClient.Communication.*;
 import EasyFilterClient.EasyFilterClient;
+import common.EasyPropertiesReader;
+import java.util.Vector;
 import javax.swing.JFrame;
 
 /**
  * Main user interface for EasyClient
  */
 public class EasyFilterClientUI extends JFrame {
-
-    //private MainPanel mainPanel;
     private EasyFilterClientInter mainPanel;
 
+    /**
+     * The protocol read from the config file
+     * Used in instanceFactory()
+     */
+    private static String protocol;
+    
+    /**
+     * The client IP read from the config file
+     */
+    private static String clientIP;
+    
+    
+    /**
+     * The client IP read from the config file
+     */
+    private static int clientPort;
+    
     /**
      * Constructor
      */
     public EasyFilterClientUI() {
         //mainPanel = new MainPanel();
         // todo selectare tip conexiune
-//        mainPanel = new EasyFilterClientInter(new BlockingTcpConnection());
-        mainPanel = new EasyFilterClientInter(new BlockingUdpConnection());
+        EasyFilterClientUI.readConfigInfo();
+        ClientCommunicationInterface ci = EasyFilterClientUI.instanceFactory();
+        mainPanel = new EasyFilterClientInter(ci);
+//        mainPanel = new EasyFilterClientInter(new BlockingUdpConnection());
         setSize(400, 400);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(mainPanel);
@@ -42,5 +61,65 @@ public class EasyFilterClientUI extends JFrame {
      */
     public static void main(String args[]) {
         EasyFilterClientUI ui = new EasyFilterClientUI();
+    }
+    
+    /**
+     * Sets the connection type based on the configuration settings in
+     * "config/config.ini"
+     *
+     * @return new CommunicationInterface instance
+     */
+    public static ClientCommunicationInterface instanceFactory()
+    {
+        if (EasyFilterClientUI.getProtocol().equals("tcp")) {
+            return new BlockingTcpConnection();
+        } else if (EasyFilterClientUI.getProtocol().equals("udp")){
+            return new BlockingUdpConnection();
+        }
+
+        return null;
+    }
+    
+    
+    /**
+     * Reads the server IPs from the config file and remembers them locally
+     * The local server is not included in the config file
+     * Also reads the request type
+     */
+    public static void readConfigInfo ()
+    {
+        int servers_number;
+        String current_server_name;
+
+        EasyPropertiesReader props = new EasyPropertiesReader("config/config.ini");
+        // read the request type from the configuration settings
+        EasyFilterClientUI.setProtocol(props.readProperty("Settings", "Protocol"));
+        // read client address
+        EasyFilterClientUI.setClientIP(props.readProperty("Address", "IP"));
+        EasyFilterClientUI.setClientPort(Integer.parseInt(props.readProperty("Address", "port")));
+    }
+    
+    public static String getProtocol() {
+        return protocol;
+    }
+
+    private static void setProtocol(String requestType) {
+        EasyFilterClientUI.protocol = requestType;
+    }
+
+    public static String getClientIP() {
+        return clientIP;
+    }
+
+    private static void setClientIP(String clientIP) {
+        EasyFilterClientUI.clientIP = clientIP;
+    }
+
+    public static int getClientPort() {
+        return clientPort;
+    }
+
+    private static void setClientPort(int clientPort) {
+        EasyFilterClientUI.clientPort = clientPort;
     }
 }

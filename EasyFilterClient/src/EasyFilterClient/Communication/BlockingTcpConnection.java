@@ -8,7 +8,7 @@
  */
 package EasyFilterClient.Communication;
 
-import common.EasyPropertiesReader;
+import EasyFilterClient.UI.EasyFilterClientUI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -35,13 +35,11 @@ public class BlockingTcpConnection implements ClientCommunicationInterface
     public void openConnection()
     {
         try {
-            EasyPropertiesReader epr = new EasyPropertiesReader("config/config.ini");
-
             // Open client socket
             this.setClientSocket(
                 new Socket(
-                    epr.readProperty("Address", "IP"),
-                    Integer.parseInt(epr.readProperty("Address", "port"))
+                    EasyFilterClientUI.getClientIP(),
+                    EasyFilterClientUI.getClientPort()
                 )
             );
         } catch (IOException ex) {
