@@ -12,6 +12,8 @@ import EasyFilterServer.Communication.CommunicationInterface;
 import common.EasyPropertiesReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -60,7 +62,7 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
     {
         // opens the server socket
         this.getCi().openConnection();
-        System.out.println("ThreadReadPoolWrite: opened connection");
+        Logger.getLogger(ThreadReadPoolWrite.class.getName()).log(Level.INFO, " Connection opened");
 
         while(true) {
             // creates a new thread for each new connection
@@ -68,7 +70,7 @@ public class ThreadReadPoolWrite extends OneThreadPerSocket
             if (localCi.connectionAccepted()) {
                 // receive the package from the client
                 common.Package pkg = (common.Package)localCi.receiveFile();
-                System.out.println("ThreadReadPoolWrite: before client thread");
+                Logger.getLogger(ThreadReadPoolWrite.class.getName()).log(Level.INFO, " Receieved file from client");
                 this.getClientThreadPool().submit(new ClientThread(localCi, pkg));
             }
         }

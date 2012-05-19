@@ -8,6 +8,7 @@
  */
 package EasyFilterServer.Communication;
 
+import EasyFilterServer.ThreadReadPoolWrite;
 import common.EasyPropertiesReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,9 +64,8 @@ public class ClientBlockingTcpConnection implements CommunicationInterface
     {
         try {
             // open client connection
-            System.out.println("before getServerSocket accept ");
             this.setClientSocket(this.getServerSocket().accept());
-            System.out.println("after getServerSocket accept ");
+            Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.INFO, " Connection accepted");
         } catch (Exception e) {
             System.err.println("Accept error: " + e);
             return false;

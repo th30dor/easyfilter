@@ -196,7 +196,7 @@ public class ClientBlockingUdpConnection implements CommunicationInterface {
 
                 chunkPosition = buf[20];
                 numberOfChunks = buf[21];
-
+               // System.out.println("Am primit chunkPosition" + chunkPosition);    
                 // download
                 if (chunkPosition == -1 && numberOfChunks == -1) {
 

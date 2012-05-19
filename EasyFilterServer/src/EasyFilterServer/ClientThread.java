@@ -27,18 +27,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Receives data from a client
- * Handles the processing of the received image
+ * Receives data from a client Handles the processing of the received image
  * @todo to be continued
  */
-class ClientThread extends Thread
-{
+class ClientThread extends Thread {
+
     /**
-     * Instance of a class that implements CommunicationInterface
-     * Will be set in the constructor
+     * Instance of a class that implements CommunicationInterface Will be set in
+     * the constructor
      */
     CommunicationInterface ci;
-
     /**
      * Instance of a class that implements CommunicationInterface
      */
@@ -49,8 +47,7 @@ class ClientThread extends Thread
      *
      * @param ci instance of a class that implements CommunicationInterface
      */
-    public ClientThread(CommunicationInterface ci, common.Package pkg)
-    {
+    public ClientThread(CommunicationInterface ci, common.Package pkg) {
         this.setCi(ci);
         this.setPkg(pkg);
     }
@@ -61,37 +58,34 @@ class ClientThread extends Thread
      * @return void
      */
     @Override
-    public void run()
-    {
-        System.out.println("server primeste filename: "
-            + this.getPkg().getFileName()
-            + " si request type: " + this.getPkg().getRequestType());
+    public void run() {
+        Logger.getLogger(ClientThread.class.getName()).log(Level.INFO, " Receiving filename: " + this.getPkg().getFileName() + " with request type " + this.getPkg().getRequestType());
 
         // determine the type of the request (image or end connection)
         switch (this.getPkg().getRequestType()) {
-        case 0:
-            try {
-                // handle the image transformation on all the servers
-                this.processImageOnServers(this.getPkg());
-            } catch (Exception ex) {
-                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            case 0:
+                try {
+                    // handle the image transformation on all the servers
+                    this.processImageOnServers(this.getPkg());
+                } catch (Exception ex) {
+                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            // send the file back to the client
-            this.getCi().sendFile(this.getPkg());
+                // send the file back to the client
+                this.getCi().sendFile(this.getPkg());
 
-            // todo remove test:
-            // Writes the modified image with the same name
-            EasyImageWriter eiw = new EasyImageWriter(this.getPkg());
-            eiw.write();
-            break;
-        case 1:
-            // search image locally and return it to the client
-            this.searchAndSendLocalImage(this.getPkg().getFileName());
-            break;
-        default:
-            // exit while in order to end client connection
-            break;
+                // todo remove test:
+                // Writes the modified image with the same name
+                EasyImageWriter eiw = new EasyImageWriter(this.getPkg());
+                eiw.write();
+                break;
+            case 1:
+                // search image locally and return it to the client
+                this.searchAndSendLocalImage(this.getPkg().getFileName());
+                break;
+            default:
+                // exit while in order to end client connection
+                break;
         } // end switch
 
         // end client connection
@@ -105,8 +99,7 @@ class ClientThread extends Thread
      *
      * @return void
      */
-    public void searchAndSendLocalImage (String fileName)
-    {
+    public void searchAndSendLocalImage(String fileName) {
         common.Package pkg;
         String filePath = "images/" + fileName;
         try {
@@ -130,20 +123,19 @@ class ClientThread extends Thread
     }
 
     /**
-     * Handle the image transformation on all the servers
-     * Modifies the original pkg image
+     * Handle the image transformation on all the servers Modifies the original
+     * pkg image
      *
      * @param pkg image received from the client
      *
      * @return void
      */
     private void processImageOnServers(common.Package pkg)
-        throws UnknownHostException, IOException
-    {
-        System.out.println("start processImageOnServers ");
+            throws UnknownHostException, IOException {
+        Logger.getLogger(ClientThread.class.getName()).log(Level.INFO, " Starting image processing");
         int i, j, k, chunkSize, packageOrder;
         int servers_number = EasyFilterServer.getServerIPs().size();
-        int [][] partialImage;
+        int[][] partialImage;
         common.Package chunkPackage = null;
         OutputStream os = null;
         InputStream is = null;
@@ -153,9 +145,8 @@ class ClientThread extends Thread
         Vector<Socket> serverList = new Vector<Socket>();
         for (i = 0; i < servers_number; i++) {
             serverList.add(new Socket(
-                EasyFilterServer.getServerIPs().elementAt(i),
-                EasyFilterServer.getServersListenPort()
-            ));
+                    EasyFilterServer.getServerIPs().elementAt(i),
+                    EasyFilterServer.getServersListenPort()));
         }
 
         // get the number of lines in a chunk for each server;
@@ -166,7 +157,7 @@ class ClientThread extends Thread
         for (i = 0; i < servers_number; i++) {
             // create partial image
             partialImage = new int[chunkSize][pkg.getWidth()];
-            for (j = i * chunkSize; j < (i + 1) * chunkSize; j ++ ) {
+            for (j = i * chunkSize; j < (i + 1) * chunkSize; j++) {
                 for (k = 0; k < pkg.getWidth(); k++) {
                     partialImage[j - i * chunkSize][k] = pkg.getImage()[j][k];
                 }
@@ -174,14 +165,13 @@ class ClientThread extends Thread
 
             // 100 + i refers to the server order
             chunkPackage = new common.Package(
-                pkg.getMagicNumber(),
-                pkg.getWidth(),
-                chunkSize,
-                pkg.getMaxGrayValue(),
-                partialImage,
-                pkg.getFileName(),
-                100 + i
-            );
+                    pkg.getMagicNumber(),
+                    pkg.getWidth(),
+                    chunkSize,
+                    pkg.getMaxGrayValue(),
+                    partialImage,
+                    pkg.getFileName(),
+                    100 + i);
 
             // send the package to the other servers
             // todo modifica in apleuri de interfata ( aici se foloseste TCP specific )
@@ -189,9 +179,7 @@ class ClientThread extends Thread
                 os = serverList.get(i).getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 // actual sending of the image chunk object
-                System.out.println("Before server oos.writeObject");
                 oos.writeObject(chunkPackage);
-                System.out.println("After server oos.writeObject");
             } catch (IOException ex) {
                 Logger.getLogger(ClientBlockingTcpConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -201,7 +189,7 @@ class ClientThread extends Thread
         // create partial image
         partialImage = new int[pkg.getHeight() - chunkSize][pkg.getWidth()];
         // i is the last sent line
-        for (j = i * chunkSize; j < pkg.getHeight(); j ++ ) {
+        for (j = i * chunkSize; j < pkg.getHeight(); j++) {
             for (k = 0; k < pkg.getWidth(); k++) {
                 // process last chunk
                 partialImage[j - i * chunkSize][k] = pkg.getImage()[j][k];
@@ -210,15 +198,14 @@ class ClientThread extends Thread
 
         // overwrite the initial image with the last chunk
         partialImage = FilterApplier.applyFilter(
-            pkg.getWidth(), pkg.getHeight() - chunkSize, partialImage
-        );
+                pkg.getWidth(), pkg.getHeight() - chunkSize, partialImage);
 
         // get chunks from other servers
         for (i = 0; i < servers_number; i++) {
             is = serverList.get(i).getInputStream();
             ois = new ObjectInputStream(is);
             try {
-                chunkPackage = (common.Package)ois.readObject();
+                chunkPackage = (common.Package) ois.readObject();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -227,20 +214,20 @@ class ClientThread extends Thread
             packageOrder = chunkPackage.getRequestType() - 100;
 
             // overwrite the initial image with the current chunk
-            for (j = 0; j < chunkPackage.getHeight(); j ++) {
-                for (k = 0; k < chunkPackage.getWidth(); k ++ ) {
+            for (j = 0; j < chunkPackage.getHeight(); j++) {
+                for (k = 0; k < chunkPackage.getWidth(); k++) {
                     pkg.getImage()[j + packageOrder * chunkSize][k] = chunkPackage.getImage()[j][k];
                 }
             }
         }
 
         // overwrite the last chunk
-        for (i = servers_number * chunkSize; i < pkg.getHeight(); i ++) {
-            for (k = 0; k < pkg.getWidth(); k ++ ) {
+        for (i = servers_number * chunkSize; i < pkg.getHeight(); i++) {
+            for (k = 0; k < pkg.getWidth(); k++) {
                 pkg.getImage()[i][k] = partialImage[i - servers_number * chunkSize][k];
             }
         }
-        
+
         // send the image to all the other servers
         for (i = 0; i < servers_number; i++) {
             try {
@@ -254,7 +241,6 @@ class ClientThread extends Thread
     } // end processImageOnServers
 
     // ~~~~~~~~ Getters and Setters ~~~~~~~~~~
-
     public Package getPkg() {
         return pkg;
     }

@@ -10,6 +10,8 @@ package EasyFilterServer;
 
 import EasyFilterServer.Communication.CommunicationInterface;
 import EasyFilterServer.Communication.ClientBlockingTcpConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import EasyFilterServer.Communication.ClientNonBlockingTcpConnection;
 
 /**
@@ -43,14 +45,15 @@ public class OneThreadPerSocket
     {
         // opens the server socket
         this.getCi().openConnection();
-        System.out.println("opened connection");
+        Logger.getLogger(OneThreadPerSocket.class.getName()).log(Level.INFO, " Connection opened");
         while(true) {
             // creates a new communication instance for each new connection
             CommunicationInterface localCi = EasyFilterServer.instanceFactory();
             if (localCi.connectionAccepted()) {
+                Logger.getLogger(OneThreadPerSocket.class.getName()).log(Level.INFO, " Connection accepted");
                 // receive the package from the client
                 common.Package pkg = (common.Package)localCi.receiveFile();
-                System.out.println("received file; before client thread");
+                Logger.getLogger(OneThreadPerSocket.class.getName()).log(Level.INFO, " Receieved file from client");
                 ClientThread wt = new ClientThread(localCi, pkg);
                 wt.start();
             }
