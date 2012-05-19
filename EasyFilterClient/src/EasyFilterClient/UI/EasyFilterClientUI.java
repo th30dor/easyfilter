@@ -31,11 +31,16 @@ public class EasyFilterClientUI extends JFrame {
      */
     private static String clientIP;
     
+    /**
+     * The server IP read from the config file
+     */
+    private static String serverIP;
+    
     
     /**
-     * The client IP read from the config file
+     * The server IP read from the config file
      */
-    private static int clientPort;
+    private static int serverPort;
     
     /**
      * Constructor
@@ -73,6 +78,8 @@ public class EasyFilterClientUI extends JFrame {
     {
         if (EasyFilterClientUI.getProtocol().equals("tcp")) {
             return new BlockingTcpConnection();
+        } else if (EasyFilterClientUI.getProtocol().equals("nio")) {
+            return new BlockingTcpConnection();
         } else if (EasyFilterClientUI.getProtocol().equals("udp")){
             return new BlockingUdpConnection();
         }
@@ -95,8 +102,9 @@ public class EasyFilterClientUI extends JFrame {
         // read the request type from the configuration settings
         EasyFilterClientUI.setProtocol(props.readProperty("Settings", "Protocol"));
         // read client address
-        EasyFilterClientUI.setClientIP(props.readProperty("Address", "IP"));
-        EasyFilterClientUI.setClientPort(Integer.parseInt(props.readProperty("Address", "port")));
+        EasyFilterClientUI.setClientIP(props.readProperty("Settings", "localIP"));
+        EasyFilterClientUI.setServerIP(props.readProperty("Address", "IP"));
+        EasyFilterClientUI.setServerPort(Integer.parseInt(props.readProperty("Address", "port")));
     }
     
     public static String getProtocol() {
@@ -114,12 +122,20 @@ public class EasyFilterClientUI extends JFrame {
     private static void setClientIP(String clientIP) {
         EasyFilterClientUI.clientIP = clientIP;
     }
-
-    public static int getClientPort() {
-        return clientPort;
+    
+    public static String getServerIP() {
+        return serverIP;
     }
 
-    private static void setClientPort(int clientPort) {
-        EasyFilterClientUI.clientPort = clientPort;
+    private static void setServerIP(String clientIP) {
+        EasyFilterClientUI.serverIP = clientIP;
+    }
+
+    public static int getServerPort() {
+        return serverPort;
+    }
+
+    private static void setServerPort(int clientPort) {
+        EasyFilterClientUI.serverPort = clientPort;
     }
 }

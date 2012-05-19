@@ -42,8 +42,8 @@ public class BlockingUdpConnection implements ClientCommunicationInterface {
      * Constructor Remembers the server address
      */
     public BlockingUdpConnection() {
-        this.setServerIP(EasyFilterClientUI.getClientIP());
-        this.setServerPort(EasyFilterClientUI.getClientPort());
+        this.setServerIP(EasyFilterClientUI.getServerIP());
+        this.setServerPort(EasyFilterClientUI.getServerPort());
     }
 
     /**
@@ -100,10 +100,11 @@ public class BlockingUdpConnection implements ClientCommunicationInterface {
             buf = ByteBuffer.allocate(22 + packageBytes.length);
             b = 0;
             // add server IP
-            for (j = 0; j < this.getServerIP().length(); j++) {
-                buf.put((byte) this.getServerIP().charAt(j));
+            String clientIP = EasyFilterClientUI.getClientIP();
+            for (j = 0; j < clientIP.length(); j++) {
+                buf.put((byte) clientIP.charAt(j));
             }
-            for (j = 0; j < 15 - this.getServerIP().length(); j++) {
+            for (j = 0; j < 15 - clientIP.length(); j++) {
                 buf.put((byte) 0);
             }
             // add server port
@@ -162,10 +163,11 @@ public class BlockingUdpConnection implements ClientCommunicationInterface {
             buf = ByteBuffer.allocate(chunkSize + 22);
             b = 0;
             // add server IP
-            for (j = 0; j < this.getServerIP().length(); j++) {
-                buf.put((byte) this.getServerIP().charAt(j));
+            String clientIP = EasyFilterClientUI.getClientIP();
+            for (j = 0; j < clientIP.length(); j++) {
+                buf.put((byte) clientIP.charAt(j));
             }
-            for (j = 0; j < 15 - this.getServerIP().length(); j++) {
+            for (j = 0; j < 15 - clientIP.length(); j++) {
                 buf.put((byte) 0);
             }
             // add server port

@@ -38,8 +38,8 @@ public class BlockingTcpConnection implements ClientCommunicationInterface
             // Open client socket
             this.setClientSocket(
                 new Socket(
-                    EasyFilterClientUI.getClientIP(),
-                    EasyFilterClientUI.getClientPort()
+                    EasyFilterClientUI.getServerIP(),
+                    EasyFilterClientUI.getServerPort()
                 )
             );
         } catch (IOException ex) {
